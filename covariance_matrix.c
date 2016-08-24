@@ -5,10 +5,20 @@ University of Arizona.
 
 Code to compute the covariance matrix of the
 coefficients of the basis expansions functions.
+Bases on Weinberg 1996 Algorithm.
 
-usage:
+Requirements:
+-------------
+gsl
 
-the code reads an input file
+Usage:
+-------
+./a.out nmax lmax #ofparticles
+
+To-Do:
+------
+1. Parallelize code.
+
 
 */
 
@@ -29,20 +39,27 @@ void read_data(char *filename, int n_points, double *r, double *theta, double *p
 void cov_matrix(int n_points, double *r , double *theta , double *phi, double *m, int max, int lmax);
 //void coefficients(int n_points, double *r , double *theta , double *phi, double *m, int max, int lmax);
 
-int main(void){
+int main(int argc, char **argv){
      double *r=NULL;
      double *theta=NULL;
      double *phi=NULL;
      double *M=NULL;
 
+     if(!argv[1]){
+     printf("Usage: ./a.out nmax lmax #ofparticles \n");
+     }
+
+
      /* Global variables */
-     /* To do: put this as input parameters */
+     int nmax= atof(argv[1]);
+     int lmax= atof(argv[2]);
+     // TO-DO: The code should recognize the number of particles in
+     // the file.
+     int n_points=atoi(argv[3]);
+     //char filename;
+     //filename = atol(argv[4]);
 
-     int n_points=425584;
-     int nmax=10;
-     int lmax=10;
-
-     char filename[20]="spherical_halo.txt";
+     char filename[100]="data/spherical_halo.txt";
      double r_s = 40.85;
 
      // ------------------------
