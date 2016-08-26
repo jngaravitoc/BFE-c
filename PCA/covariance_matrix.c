@@ -33,10 +33,19 @@ To-Do:
 double Anl_tilde(int n, int l);
 double phi_nl_f(double r, int n, int l);
 double phi_nlm_f(double r, double theta, int n, int l, int m);
-double sum_angular(int n_points, double *r, double *theta, double *phi, double *M, int n, int l, int m);
-double sum_angular_prod(int n_points, double *r, double *theta, double *phi, double *M, int n, int l, int m, int n_prime, int l_prime, int m_prime);
-void read_data(char *filename, int n_points, double *r, double *theta, double *phi, double *m, double r_s);
-void cov_matrix(int n_points, double *r , double *theta , double *phi, double *m, int max, int lmax);
+double sum_angular(int n_points, double *r, double *theta, \
+                   double *phi, double *M, int n, int l, int m);
+
+double sum_angular_prod(int n_points, double *r, double *theta,\
+                        double *phi, double *M, int n, int l,\
+                        int m, int n_prime, int l_prime, int m_prime);
+
+void read_data(char *filename, int n_points, double *r, double *theta,\
+               double *phi, double *m, double r_s);
+
+void cov_matrix(int n_points, double *r , double *theta , double *phi,\
+                double *m, int max, int lmax);
+
 //void coefficients(int n_points, double *r , double *theta , double *phi, double *m, int max, int lmax);
 
 int main(int argc, char **argv){
@@ -59,7 +68,7 @@ int main(int argc, char **argv){
      //char filename;
      //filename = atol(argv[4]);
 
-     char filename[100]="data/spherical_halo.txt";
+     char filename[100]="../data/spherical_halo.txt";
      double r_s = 40.85;
 
      // ------------------------
@@ -109,7 +118,9 @@ double phi_nlm_f(double r, double theta ,int n, int l, int m){
 
 
 /* function that sums the angular terms over all the particles */
-double sum_angular(int n_points, double *r, double *theta, double *phi, double *M, int n, int l, int m){
+double sum_angular(int n_points, double *r, double *theta, double *phi,\
+                   double *M, int n, int l, int m){
+
     double all_angular=0;
     double phi_nlm;
     int i;
@@ -122,14 +133,17 @@ double sum_angular(int n_points, double *r, double *theta, double *phi, double *
 }
 
 
-double sum_angular_prod(int n_points, double *r, double *theta, double *phi, double *M, int n, int l, int m, int n_prime, int l_prime, int m_prime){
+double sum_angular_prod(int n_points, double *r, double *theta, double *phi,\
+                        double *M, int n, int l, int m, int n_prime, int l_prime,\
+                        int m_prime){
+
     double all_angular=0;
     double phi_nlm, phi_nlm_prime;
     int i;
     for(i=0;i<=n_points;i++){
       phi_nlm = phi_nlm_f(r[i], theta[i], n, l, m);
       phi_nlm_prime = phi_nlm_f(r[i], theta[i], n_prime, l_prime, m_prime);
-      all_angular += phi_nlm*phi_nlm_prime*cos(m*phi[i])*cos(m_prime*phi[i])*M[i];
+      all_angular += phi_nlm*phi_nlm_prime*cos(m*phi[i])*cos(m_prime*phi[i])*M[i]*M[i];
     }
     return all_angular;
 }
