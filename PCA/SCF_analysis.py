@@ -164,7 +164,36 @@ def PCA_coefficients(Snlm, Tnlm, cov_matrix_data, nmax, lmax):
 
     return Snlm_PCA*b_S_PCA, Tnlm_PCA*b_T_PCA
 
+
+def nlm_coeff(k, nmax, lmax):
+
+    """
+    Returns the coefficients n, l, m for a given number of
+    the.....
+    e.g k=1 is n=0, l=1, m=0
+
+    Input:
+    ------
+    k: Number of the coefficient. e.g
+    nmax: maximum n in the expansion.
+    lmax: maximum l in the expansion.
+
+    Output:
+    -------
+    (n, l, m)
+
+    """
+    i = 0
+    for n in range(nmax+1):
+        for l in range(lmax+1):
+            for m in range(l+1):
+                if (i==k):
+                    return(n,l,m)
+                    break
+                i+=1
+
 # Visualization plots.
+
 
 def pot_scatter(potential, posx, posy, title, xmin=False, xmax=False, \
                 ymin=False, ymax=False, sf=False, figt=False):
@@ -221,4 +250,6 @@ def pot_scatter(potential, posx, posy, title, xmin=False, xmax=False, \
     if sf:
         plt.savefig(figt+'.png', bbox_inches='tight', dpi=300)
 
+# plot potenital contours with no scatter plot.
 
+# function to plot multipole moments pontential
