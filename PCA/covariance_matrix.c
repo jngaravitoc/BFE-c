@@ -9,7 +9,7 @@ Bases on Weinberg 1996 Algorithm.
 
 Requirements:
 -------------
-gsl
+gnu/gsl
 
 Usage:
 -------
@@ -17,10 +17,10 @@ Usage:
 
 To-Do:
 ------
-1. Compute T.
-2. Write file with the results.
-3. Parallelize code.
-
+1. Write file with the results.
+2. Parallelize code.
+3. Put comments and organize code!
+4. Make # of particles not an argument.
 
 */
 
@@ -35,12 +35,14 @@ To-Do:
 double Anl_tilde(int n, int l);
 double phi_nl_f(double r, int n, int l);
 double phi_nlm_f(double r, double theta, int n, int l, int m);
-double sum_angular(int n_points, double *r, double *theta, \
-                   double *phi, double *M, int n, int l, int m);
+void sum_angular(double * All_phi_S, double * All_phi_T, int n_points,\
+                 double *r, double *theta, double *phi, double *M,\
+                 int n, int l, int m);
 
-double sum_angular_prod(int n_points, double *r, double *theta,\
-                        double *phi, double *M, int n, int l,\
-                        int m, int n_prime, int l_prime, int m_prime);
+void sum_angular_prod(double * All_phi_S, double * All_phi_T, int n_points,\
+                      double *r, double *theta, double *phi, double *M, \
+                      int n, int l, int m, int n_prime, int l_prime,\
+                      int m_prime);
 
 void read_data(char *filename, int n_points, double *r, double *theta,\
                double *phi, double *m, double r_s);
@@ -48,7 +50,8 @@ void read_data(char *filename, int n_points, double *r, double *theta,\
 void cov_matrix(int n_points, double *r , double *theta , double *phi,\
                 double *m, int max, int lmax);
 
-//void coefficients(int n_points, double *r , double *theta , double *phi, double *m, int max, int lmax);
+//void coefficients(int n_points, double *r , double *theta 
+//, double *phi, double *m, int max, int lmax);
 
 int main(int argc, char **argv){
      double *r=NULL;
@@ -74,8 +77,6 @@ int main(int argc, char **argv){
      double r_s = 40.85;
 
      // ------------------------
-
-     printf("%s \n", filename);
 
      /* Allocating memory for pointers */
      r = malloc(n_points*sizeof(long double));
@@ -120,43 +121,45 @@ double phi_nlm_f(double r, double theta ,int n, int l, int m){
 
 
 /* function that sums the angular terms over all the particles */
-double sum_angular(int n_points, double *r, double *theta, double *phi,\
-                   double *M, int n, int l, int m){
+void sum_angular(double * All_phi_S, double * All_phi_T, \
+                 int n_points, double *r, double *theta, double *phi,\
+                 double *M, int n, int l, int m){
 
-    double all_angular_S=0;
-    double all_angular_T=0;
     double phi_nlm;
     int i;
     for(i=0;i<=n_points;i++){
+
     phi_nlm = phi_nlm_f(r[i], theta[i], n, l, m);
-    //printf("%f \n", phi_nlm);
-    all_angular_S += phi_nlm*cos(m*phi[i])*M[i];
-    all_angular_T += phi_nlm*sin(m*phi[i])*M[i];
+    *All_phi_S += phi_nlm*cos(m*phi[i])*M[i];
+    *All_phi_T += phi_nlm*sin(m*phi[i])*M[i];
+
     }
-    return all_angular_S, all_angular_T;
 }
 
 
-double sum_angular_prod(int n_points, double *r, double *theta, double *phi,\
-                        double *M, int n, int l, int m, int n_prime, int l_prime,\
-                        int m_prime){
+void sum_angular_prod(double * All_phi_S, double * All_phi_T, int n_points,\
+                      double *r, double *theta, double *phi, double *M, \
+                      int n, int l, int m, int n_prime, int l_prime,\
+                      int m_prime){
 
-    double all_angular=0;
     double phi_nlm, phi_nlm_prime;
     int i;
     for(i=0;i<=n_points;i++){
       phi_nlm = phi_nlm_f(r[i], theta[i], n, l, m);
       phi_nlm_prime = phi_nlm_f(r[i], theta[i], n_prime, l_prime, m_prime);
-      all_angular += phi_nlm*phi_nlm_prime*cos(m*phi[i])*cos(m_prime*phi[i])*M[i]*M[i];
+      *All_phi_S += phi_nlm*phi_nlm_prime*cos(m*phi[i])*cos(m_prime*phi[i])*M[i]*M[i];
+      *All_phi_T += phi_nlm*phi_nlm_prime*sin(m*phi[i])*sin(m_prime*phi[i])*M[i]*M[i];
     }
-    return all_angular;
 }
-void cov_matrix(int n_points, double *r , double *theta , double *phi, double *M, int nmax, int lmax){
+void cov_matrix(int n_points, double *r , double *theta , double *phi,\
+                double *M, int nmax, int lmax){
 
     int n, l, m, dm0, n_prime, l_prime, m_prime, dm0_prime;
     double A_nl, A_nl_prime;
-    double All_phi_nlm, All_phi_nlm_prime, All_phi_nlm_mix;
+    double All_phi_nlm_S, All_phi_nlm_prime_S, All_phi_nlm_mix_S;
+    double All_phi_nlm_T, All_phi_nlm_prime_T, All_phi_nlm_mix_T;
     double S, S_prime, SS_prime, S_cov_mat;
+    double T, T_prime, TT_prime, T_cov_mat;
 
     for(n=0;n<=nmax;n++){
       for(l=0;l<=lmax;l++){
@@ -182,15 +185,27 @@ void cov_matrix(int n_points, double *r , double *theta , double *phi, double *M
                 A_nl = Anl_tilde(n,l);
                 A_nl_prime = Anl_tilde(n_prime,l_prime);
 
-                All_phi_nlm = sum_angular(n_points, r, theta, phi, M, n, l, m);
-                All_phi_nlm_prime = sum_angular(n_points, r, theta, phi, M, n_prime, l_prime, m_prime);
-                All_phi_nlm_mix = sum_angular_prod(n_points, r, theta, phi, M, n, l, m, n_prime, l_prime, m_prime);
-                S = (2-dm0)*A_nl*All_phi_nlm;
-                S_prime = (2-dm0_prime)*A_nl_prime*All_phi_nlm_prime;
-                SS_prime = (2-dm0)*(2-dm0_prime)*A_nl*A_nl_prime*All_phi_nlm_mix;
+                sum_angular(&All_phi_nlm_S, &All_phi_nlm_T, n_points,\
+                            r, theta, phi, M, n, l, m);
+
+                sum_angular(&All_phi_nlm_prime_S, &All_phi_nlm_prime_T,\
+                            n_points, r, theta, phi, M, n_prime, \
+                            l_prime, m_prime);
+
+                sum_angular_prod(&All_phi_nlm_mix_S, &All_phi_nlm_mix_T,\
+                                 n_points, r, theta, phi, M, n, l, m,\
+                                 n_prime, l_prime, m_prime);
+
+                S = (2-dm0)*A_nl*All_phi_nlm_S;
+                S_prime = (2-dm0_prime)*A_nl_prime*All_phi_nlm_prime_S;
+                SS_prime = (2-dm0)*(2-dm0_prime)*A_nl*A_nl_prime*All_phi_nlm_mix_S;
                 S_cov_mat = SS_prime - S*S_prime;
 
-                printf("%f \n", S_cov_mat);
+                T = (2-dm0)*A_nl*All_phi_nlm_T;
+                T_prime = (2-dm0_prime)*A_nl_prime*All_phi_nlm_prime_T;
+                TT_prime = (2-dm0)*(2-dm0_prime)*A_nl*A_nl_prime*All_phi_nlm_mix_T;
+                T_cov_mat = TT_prime - T*T_prime;
+                printf("%f \t %f \n", S_cov_mat, T_cov_mat);
               }
             }
           }
