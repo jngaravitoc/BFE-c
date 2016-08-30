@@ -10,7 +10,6 @@ Author: Nicolas Garavito-Camargo
 import numpy as np
 from scipy import linalg
 
-# Coefficients Analysis.
 
 def read_cov_mat(cov_mat_data, nmax, lmax):
     """
@@ -113,7 +112,57 @@ def mise(b_s, var_a, a):
               (b_s[:i+1]-1)**2.0*a[:i+1]**2.0)
     return D
 
+def PCA_coefficients(Snlm, Tnlm, cov_matrix_data, nmax, lmax):
 
+    """
+    Compute the SCF coefficients in PCA basis.
+
+    Input:
+    ------
+
+    Snlm: 1d Array with the values of Snlm
+    Tnlm: 1d Array with the values of Tnlm
+    cov_matrix_data: string with the path and name of the covariance
+    matrix file.
+    nmax: nmax
+    lmax: lmax
+
+    Output:
+    -------
+
+    Snlm* bnlm*: Snlm coefficient in the principal component basis and
+    with smoothening.
+
+    Tnlm* bnlm*: Tnlm coefficient in the principal component basis and
+    with smoothening.
+
+    """
+
+    cov_mat_data = np.loadtxt(cov_matrix_data)
+    cov_matrix_S = read_cov_mat(cov_mat_data[:,0], nmax, lmax)
+    cov_matrix_T = read_cov_mat(cov_mat_data[:,1], nmax, lmax)
+
+    # computing the outter matrix
+
+    outter_mat_S, eigvals_S, Ttrans_S = outter_matrix(Snlm)
+    outter_mat_T, eigvals_T, Ttrans_T = outter_matrix(Tnlm)
+
+    # computing the coefficients in the new basis
+
+    Snlm_PCA = coeff_PCA(Snlm, Ttrans_S)
+    Tnlm_PCA = coeff_PCA(Tnlm, Ttrans_T)
+
+    # computing the variance in the new basis
+
+    var_S_PCA = var_PCA(cov_matrix_S, Ttrans_S.real)
+    var_T_PCA = var_PCA(cov_matrix_T, Ttrans_T.real)
+
+    # computing the smoothening in the PCA basis
+
+    b_S_PCA = b(Snlm_PCA, var_S_PCA)
+    b_T_PCA = b(Tnlm_PCA, var_T_PCA)
+
+    return Snlm_PCA*b_S_PCA, Tnlm_PCA*b_T_PCA
 
 # Visualization plots.
 
