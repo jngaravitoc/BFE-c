@@ -17,7 +17,9 @@ Usage:
 
 To-Do:
 ------
-1. Parallelize code.
+1. Compute T.
+2. Write file with the results.
+3. Parallelize code.
 
 
 */
@@ -121,15 +123,17 @@ double phi_nlm_f(double r, double theta ,int n, int l, int m){
 double sum_angular(int n_points, double *r, double *theta, double *phi,\
                    double *M, int n, int l, int m){
 
-    double all_angular=0;
+    double all_angular_S=0;
+    double all_angular_T=0;
     double phi_nlm;
     int i;
     for(i=0;i<=n_points;i++){
     phi_nlm = phi_nlm_f(r[i], theta[i], n, l, m);
     //printf("%f \n", phi_nlm);
-    all_angular += phi_nlm*cos(m*phi[i])*M[i];
+    all_angular_S += phi_nlm*cos(m*phi[i])*M[i];
+    all_angular_T += phi_nlm*sin(m*phi[i])*M[i];
     }
-    return all_angular;
+    return all_angular_S, all_angular_T;
 }
 
 
