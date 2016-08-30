@@ -19,7 +19,8 @@ To-Do:
 ------
 1. Write file with the results.
 2. Parallelize code.
-
+3. Put comments and organize code!
+4. Make # of particles not an argument.
 
 */
 
@@ -150,7 +151,8 @@ void sum_angular_prod(double * All_phi_S, double * All_phi_T, int n_points,\
       *All_phi_T += phi_nlm*phi_nlm_prime*sin(m*phi[i])*sin(m_prime*phi[i])*M[i]*M[i];
     }
 }
-void cov_matrix(int n_points, double *r , double *theta , double *phi, double *M, int nmax, int lmax){
+void cov_matrix(int n_points, double *r , double *theta , double *phi,\
+                double *M, int nmax, int lmax){
 
     int n, l, m, dm0, n_prime, l_prime, m_prime, dm0_prime;
     double A_nl, A_nl_prime;
@@ -183,9 +185,16 @@ void cov_matrix(int n_points, double *r , double *theta , double *phi, double *M
                 A_nl = Anl_tilde(n,l);
                 A_nl_prime = Anl_tilde(n_prime,l_prime);
 
-                sum_angular(&All_phi_nlm_S, &All_phi_nlm_T, n_points, r, theta, phi, M, n, l, m);
-                sum_angular(&All_phi_nlm_prime_S, &All_phi_nlm_prime_T, n_points, r, theta, phi, M, n_prime, l_prime, m_prime);
-                sum_angular_prod(&All_phi_nlm_mix_S, &All_phi_nlm_mix_T, n_points, r, theta, phi, M, n, l, m, n_prime, l_prime, m_prime);
+                sum_angular(&All_phi_nlm_S, &All_phi_nlm_T, n_points,\
+                            r, theta, phi, M, n, l, m);
+
+                sum_angular(&All_phi_nlm_prime_S, &All_phi_nlm_prime_T,\
+                            n_points, r, theta, phi, M, n_prime, \
+                            l_prime, m_prime);
+
+                sum_angular_prod(&All_phi_nlm_mix_S, &All_phi_nlm_mix_T,\
+                                 n_points, r, theta, phi, M, n, l, m,\
+                                 n_prime, l_prime, m_prime);
 
                 S = (2-dm0)*A_nl*All_phi_nlm_S;
                 S_prime = (2-dm0_prime)*A_nl_prime*All_phi_nlm_prime_S;
