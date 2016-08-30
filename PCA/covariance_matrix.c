@@ -68,7 +68,7 @@ int main(int argc, char **argv){
      //char filename;
      //filename = atol(argv[4]);
 
-     char filename[100]="../data/spherical_halo.txt";
+     char filename[100]="../data/prolate_halo.txt";
      double r_s = 40.85;
 
      // ------------------------
