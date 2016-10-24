@@ -73,7 +73,7 @@ int main(int argc, char **argv){
      //char filename;
      //filename = atol(argv[4]);
 
-     char filename[100]="../data/oblate_halo.txt";
+     char filename[100]="../data/spherical_halo.txt";
      double r_s = 40.85;
 
      // ------------------------
@@ -129,8 +129,8 @@ void sum_angular(double * All_phi_S, double * All_phi_T, \
     int i;
     *All_phi_S = 0;
     *All_phi_T = 0;
-    for(i=0;i<=n_points;i++){
 
+    for(i=0;i<=n_points;i++){
     phi_nlm = phi_nlm_f(r[i], theta[i], n, l, m);
     *All_phi_S += phi_nlm*cos(m*phi[i])*M[i];
     *All_phi_T += phi_nlm*sin(m*phi[i])*M[i];
@@ -148,6 +148,7 @@ void sum_angular_prod(double * All_phi_mS, double * All_phi_mT, int n_points,\
     int i;
     *All_phi_mS = 0;
     *All_phi_mT = 0;
+
     for(i=0;i<=n_points;i++){
       phi_nlm = phi_nlm_f(r[i], theta[i], n, l, m);
       phi_nlm_prime = phi_nlm_f(r[i], theta[i], n_prime, l_prime, m_prime);
@@ -203,13 +204,16 @@ void cov_matrix(int n_points, double *r , double *theta , double *phi,\
                 S = (2-dm0)*A_nl*All_phi_nlm_S;
                 S_prime = (2-dm0_prime)*A_nl_prime*All_phi_nlm_prime_S;
                 SS_prime = (2-dm0)*(2-dm0_prime)*A_nl*A_nl_prime*All_phi_nlm_mix_S;
-                S_cov_mat = SS_prime - S*S_prime;
+                S_cov_mat = SS_prime - S*S_prime/n_points;
 
+                /*
                 T = (2-dm0)*A_nl*All_phi_nlm_T;
                 T_prime = (2-dm0_prime)*A_nl_prime*All_phi_nlm_prime_T;
                 TT_prime = (2-dm0)*(2-dm0_prime)*A_nl*A_nl_prime*All_phi_nlm_mix_T;
-                T_cov_mat = TT_prime - T*T_prime;
-                printf("%f \t %f \n", S_cov_mat, T_cov_mat);
+                T_cov_mat = TT_prime - T*T_prime/n_points;
+                */
+                //printf("%f \t %f \n", S_cov_mat, T_cov_mat);
+                printf("%f \n", S_cov_mat);//, T_cov_mat);
               }
             }
           }
