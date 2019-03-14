@@ -1,0 +1,70 @@
+\documentclass[14pt]{article}
+\usepackage{amsmath}
+\usepackage{listings} % For writing code see http://ctan.org/pkg/listings
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage[margin=1.0in]{geometry}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+
+\title{BFE high values on the coefficients with high order $l$}
+\author{Nico Garavito-Camargo}
+
+
+\begin{document}
+\maketitle
+
+\section{Computing the coefficients review:}
+
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{c  c}
+    \hline
+    \hline
+    Hernquist+92 notation & Lowing+11 notation \\
+    \hline
+    $A_{nlm}$ & $S_{nlm} cos m\Phi + T_{nlm}sin m\Phi $\\
+    $I_{nl} = 1/\tilde{A}_{nl}$ & $1/\tilde{A}_{nl}$\\
+    $K_{nl}$ & $K_{nl}$ \\
+    $\tilde{\rho}_{nl}$ & $\rho_{nl}$\\
+    $\tilde{\Phi}_{nl}$ & $\Phi_{nl}$\\
+    \hline
+    \hline
+  \end{tabular}
+  \caption{Notation conversion between Hernquist92 and Lowing11 papers}
+\end{table}
+
+
+\begin{equation}
+  \Phi_{nl}(r) = - \dfrac{r^l}{r(1+r)^{2l+3}}C_{n}^{2l+3/2}(\xi)\sqrt{4\pi}
+\end{equation}
+
+
+
+\begin{equation}
+  \rho_{nl}(r) = \dfrac{K_{nl}}{2\pi}\dfrac{r^l}{(1+r)^{2l+1}}C_{n}^{2l+3/2}(\xi)\sqrt{4\pi}
+\end{equation}
+
+Where $K_{nl}$ is defined as:
+\begin{equation}
+    K_{nl}=\dfrac{1}{2}n(n+4l+3) +(l+1)(2l+1)
+\end{equation}
+
+\begin{equation}
+  \rho(r, \theta, \phi) = \sum_{n} \sum_l \sum_m Y_{lm}(\theta) \rho_{nl}(r)
+  \left[ S_{nlm} cos m\phi + T_{nlm} sin m \phi \right]
+\end{equation}
+
+\section{Test-example with a Hernquist halo:}
+
+
+
+
+
+
+
+\end{document}
+
