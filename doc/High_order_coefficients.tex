@@ -20,10 +20,11 @@
 \begin{document}
 \maketitle
 
-\section*{Computing coefficients and the associated gravitational potential
-energy.}
+\section*{Computing coefficients and the gravitational potential
+energy}
 
-Following \cite{Lowing11} notation the coefficients in the BFE are:
+Following the notation in \cite{Lowing11}, the coefficients in a BFE around a
+Hernquist profile are:
 
 \begin{equation}\label{eq:coeff}
   \begin{aligned}
@@ -34,12 +35,12 @@ Following \cite{Lowing11} notation the coefficients in the BFE are:
   \end{aligned}
 \end{equation}
 
-And the density and potential are found to be:
+With these coefficients the density and potential are found to be:
 
 
 \begin{equation}\label{eq:rho}
   \rho(r, \theta, \phi) = \sum_{n} \sum_l \sum_m Y_{lm}(\theta) \rho_{nl}(r)
-  \left[ S_{nlm} cos\ m \phi + T_{nlm} sin m\ \phi \right]
+  \left[ S_{nlm} cos\ m \phi + T_{nlm} sin\ m\phi \right]
 \end{equation}
 
 
@@ -49,35 +50,28 @@ And the density and potential are found to be:
 \end{equation}
 
 A complete derivation of Equations \ref{eq:coeff}, \ref{eq:rho}, \ref{eq:phi}
-are found in the Appendix.
+are found in the Appendix \ref{sec:appendix}.
 
-The total gravitational energy of the system is:
+The total gravitational potential energy of the system is:
 
 \begin{equation}\label{eq:energy}
   U = \dfrac{1}{2} \int_V \rho(r, \theta, \phi)\Phi(r,\theta, \phi)^{*} d^3
-  \textbf{r}
+  \textbf{r} =  \dfrac{1}{2}\sum_{nlm} \frac{S_{nlm}^2 +
+  T_{nlm}^2}{\tilde{A}_{nl}} 
 \end{equation}
 
-Replacing Equation \ref{eq:rho} and \ref{eq:phi} into Equation \ref{eq:energy}:
+Where the term on the right hand side was derived using orthogonal properties of
+the Spherical harmonics see appendix \ref{sec:appendix} for details. 
 
-\begin{equation}
-  U = \dfrac{1}{2} \int_v  \sum_{nlm} A_{nlm}^2 \rho_{nlm}(r, \theta, \phi) \phi_{nlm}(r, \theta, \phi) d^3{\textbf{r}} = \sum_{nlm}
-  \frac{A_{nlm}^2}{\tilde{A}_{nl}} \delta_{nn'}\delta_{ll'}\delta_{mm'} 
-\end{equation}
-
-
-
-\begin{equation}
-  U = \dfrac{1}{2}\sum_{nlm} \frac{A_{n'l'm'}^2}{\tilde{A}_{n'l'}} = \sum_{nlm} U_{n'l'm'}
-\end{equation}
 
 
 \section{Computation of the expansion coefficients and the gravitational
 potential energy in Hernquist halos}
+\subsection{Spherical Halo:}
 
 Figure \ref{fig:coeff_hernquist} shows the value of the coefficients $S_{nlm}$
 defined in Equation \ref{eq:coeff} for a Dark
-Matter halo with a Hernquist profile and scale length of $a=\sim 40 kpc$. The left
+Matter halo with a Hernquist profile and scale length of $a= 40 kpc$. The left
 panel on Figure \ref{fig:coeff_hernquist} shows the value of the
 coefficients as a function of $n$. The first and the second terms are the
 only coefficients that have a noticeable contribution. On the right panel, the
@@ -89,18 +83,22 @@ the coefficients increase exponentially with $l$.
   \includegraphics[scale=0.5]{../code/S_n_henrquist.pdf}
   \includegraphics[scale=0.5]{../code/S_l_henrquist.pdf}
   \caption{Coefficients computed using equation \label{eq:coeff} as a function
-  of $n$ (left) and $l$ (right).} \label{fig:coeff_hernquist}
+  of $n$ (left) and $l$ (right). The amplitude of the coefficients increase
+  exponentially with $l$} \label{fig:coeff_hernquist}
 \end{figure}
 
+Figure \ref{fig:spherical_energy} shows the energy terms from Equation
+\ref{eq:energy}. The first 
 
 \begin{figure}[H]
   \centering
   \includegraphics[scale=0.5]{../code/energy_terms_hern_a_40_1E5.pdf}
   \includegraphics[scale=0.5]{../code/energy_terms_hern_a_40_1E6.pdf}
   \includegraphics[scale=0.5]{../code/energy_terms_hern_a_40_1E7.pdf}
-  \caption{Terms on the potential energy contribution}
+  \caption{Terms on the potential energy  contribution}\label{fig:spherical_energy}
 \end{figure}
 
+\subsection{Oblate halo}
 
 If one repeats the computations of the coefficients and the energy terms for a
 Hernquist oblate halo with axis ratios of XX one finds that the coefficients
@@ -132,6 +130,12 @@ the potential and to the energy terms, as shown in the right panel of Figure
 \ref{fig:coeff_hernquist}, is negligible. 
 
 
+Apply energy cut to identify coefficients.
+
+Make a proposal of how to combine this with variance a PCA. 
+
+Next steps: -PCA? - Trying out how the simulations look like. Can I see a really
+obvious term as a function of resoluion.
 
 \bibliography{references}
 
@@ -139,7 +143,7 @@ the potential and to the energy terms, as shown in the right panel of Figure
 \appendix
 
 
-\section*{Appendix: A review of the BFE formalism:}
+\section*{Appendix: A review of the BFE formalism:}\label{sec:appendix}
 
 In this document we will follow the notation presented \cite{Lowing11}. Table
 \ref{tab:conversion} shows the conversion between the notation used in \cite{Hernquist92} and
@@ -245,7 +249,7 @@ With these relations the coefficients can be derived as follows:
 \end{equation}
 
 
-\begin{equation}\label{eq:coeff}
+\begin{equation}
   \begin{aligned}
     S_{nlm} = (2-\delta_{m0})\tilde{A}_{nl} \sum_k m_k
   \Phi_{nl}(r_k)Y_{lm}(\theta_k) cos\ m\phi_k \\
