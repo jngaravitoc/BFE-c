@@ -83,7 +83,7 @@ the coefficients increase exponentially with $l$.
   \includegraphics[scale=0.5]{../code/S_n_henrquist.pdf}
   \includegraphics[scale=0.5]{../code/S_l_henrquist.pdf}
   \caption{Coefficients computed using equation \label{eq:coeff} as a function
-  of $n$ (left) and $l$ (right). The amplitude of the coefficients increase
+  of $n$ (left) and $l$ (right) for three different resolutions. The amplitude of the coefficients increase
   exponentially with $l$} \label{fig:coeff_hernquist}
 \end{figure}
 
@@ -95,13 +95,17 @@ Figure \ref{fig:spherical_energy} shows the energy terms from Equation
   \includegraphics[scale=0.5]{../code/energy_terms_hern_a_40_1E5.pdf}
   \includegraphics[scale=0.5]{../code/energy_terms_hern_a_40_1E6.pdf}
   \includegraphics[scale=0.5]{../code/energy_terms_hern_a_40_1E7.pdf}
-  \caption{Terms on the potential energy  contribution}\label{fig:spherical_energy}
+  \caption{Terms on the potential energy as defined in equation 
+  \ref{eq:energy} for a Hernquist spherical halo. On the left panel the dependency on $l$ is shown for every value of $n$ color lines. 
+On the right the dependency on $n$ is shown for every value of $l$. Each row represent a halo with different number of particles, the highest resolution halo is on the bottom. Only the coefficients 
+with $n<6$ and $l=0$ have values larger than 0. As the resolution of the halos increases the amplitudes 
+of the 'energies' for those coefficients with $l>0$.}\label{fig:spherical_energy}
 \end{figure}
 
 \subsection{Oblate halo}
 
 If one repeats the computations of the coefficients and the energy terms for a
-Hernquist oblate halo with axis ratios of XX one finds that the coefficients
+Hernquist \textit{oblate} halo with axis ratios of 1.8 one finds that the coefficients
 with $l=2,4,6$ have higher amplitudes when compare to the spherical case as shown
 in Figure \ref{fig:oblate_coeff}. 
 
@@ -110,32 +114,37 @@ in Figure \ref{fig:oblate_coeff}.
   \centering
   \includegraphics[scale=0.5]{../code/S_n_henrquist_oblate.pdf}
   \includegraphics[scale=0.5]{../code/S_l_henrquist_oblate.pdf}
-  \caption{Expansion coefficients computed using equation \label{eq:coefficients}}\label{fig:oblate_coeff}
+  \caption{Expansion coefficients computed using equation \label{eq:coeff} for 
+  a Hernquist oblate halo with axis ratio of 1.8 (Blue lines) for comparison the 
+    coefficients for a spherical Hernquist halo are shown in Black line. For the
+oblate halo, the coefficients with $l=m=0$ (left panel) have the same amplitudes as in the
+spherical halo. However, coefficients with $l>0$ (right panel) have larger amplitudes 
+than those for the spherical halo, specially those with $l=2,4,8$. The amplitude increases with $l$ as in the spherical case.} \label{fig:oblate_coeff}
 \end{figure}
 
-The corresponding energy terms are 
+The corresponding energy terms are shown in Figure \ref{fig:energy_oblate}
 
 \begin{figure}[H]
   \centering
   \includegraphics[scale=0.5]{../code/energy_terms_oblate_hern_a_40_1E5.pdf}
-  \caption{Terms on the potential energy contribution}
+  \caption{Terms on the potential energy contribution for the oblate Hernquist halo.
+The amplitude of the terms with l=[2, 4] is larger than 0.} \label{fig:energy_oblate}
 \end{figure}
 
 
 
 
 \textbf{Conclusion:} The coefficients naturally increase as a function of $l$
-even if the underlying halo is is Hernquist halo. However, the contribution to 
-the potential and to the energy terms, as shown in the right panel of Figure 
-\ref{fig:coeff_hernquist}, is negligible. 
+even if the underlying halo is is Hernquist halo. However, the amplitude of those terms
+to the 'energy' is small as shown in the right panel of Figure \ref{fig:spherical_energy}.\\
 
-
-Apply energy cut to identify coefficients.
-
-Make a proposal of how to combine this with variance a PCA. 
-
-Next steps: -PCA? - Trying out how the simulations look like. Can I see a really
-obvious term as a function of resoluion.
+\textbf{What is next:}\\
+\begin{itemize}
+\item Apply energy cut to identify coefficients that contribute to the potential/density?
+\item Compute the variance of the coefficients
+\item Apply the PCA method. 
+\item Find out the terms that contribute the most to the simulations with the LMC.
+\end{itemize}
 
 \bibliography{references}
 
