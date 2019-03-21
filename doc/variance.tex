@@ -1,0 +1,261 @@
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{float}
+
+\begin{document}
+
+\title{SCF Method applied to different halos}%replace X with the appropriate number
+\author{Nicolas Garavito-Camargo} 
+
+\maketitle
+
+The smoothening $b_j$ have a maximum value of $b_j=0$ when the
+variance is $0$ and the minimum value is $b_j=1$ when the coefficient
+is very small.
+
+When $b=0.5$ the coefficient the $S/N=1.0$.
+
+When does the variance of a coefficient is smaller than the value
+of the coefficient? in this case  $b$ can be larger than $0.5$
+
+Following Weinberg (1996) the variance of the coefficients is defined
+as:
+
+\begin{equation}
+var(\hat{a}_j) = \dfrac{1}{N}{E[\Psi_j\Psi_j] - E[\Psi_j]E[\Psi_j]}
+\end{equation}
+
+Which in Lowing (2011) notation would be:
+
+\begin{equation}\label{eq:var}
+var(S_{n,l,m}) = M \left[ \sum_{i}^{N}m_i \Psi_{n,l,m}^2(x_i)
+ - \left(\sum_{i}^{N}m_i \Psi_{n,l,m}(x_i)\right)^2
+\right]
+\end{equation}
+
+The first term in the right hand side is the covariance matrix and
+the second term of Eq.\ref{eq:var} are the coefficients
+$\hat{S}_{n,l,m}^2$ and $\hat{T}_{n,l,m}^2$. $M$ is the total
+mass and $\Psi_{nlm}$ is defined as:
+
+\begin{equation}
+\Psi_{nlm}(x_i) = (2-\delta_{m,0})
+\tilde{A}_{n,l}\Phi_{n,l}(r_i)Y_{l,m}(\theta_i)cos(m\phi_i)
+\end{equation}
+
+In order to do the PCA analysis we apply the method explained in
+Weinber (1996). The first step is to compute 
+the outer-product matrix defined as:
+
+\begin{equation}
+S_{kl} = \hat{a}_k \hat{a}_l
+\end{equation}
+
+Which in Lowing (2011) notation the matrix will take the form:
+
+\begin{equation}
+\tilde{S}_{nlm n'l'm'} = \hat{S}_{nlm} \hat{S}_{n'l'm'}
+\end{equation}
+
+The size of this matrix is going to be $(n\times l \times m)\times( n' \times l'
+\times m')$.
+
+The eigenvectors of $\tilde{S}_{nlm n'l'm'}$ are going to define the
+rotation matrix $T_{(n' \times l' \times m')(n \times l \times m)}$.
+
+The coefficients in the principal basis are going to be:
+
+\begin{equation}
+\hat{S}^{*}_{nlm} = \sum_{nlm} T_{n'l'm',nlm} S_{nlm}
+\end{equation}
+
+The variance of the coefficients in the principal basis would be:
+
+\begin{equation}
+var(\hat{S}^{*}_{nlm}) = \sum_{nlm,nlm} T_{ijk,nlm}
+var(\hat{S}_{(nlm)(n'l'm')}) T_{(n'l'm',i'j'k')}
+\end{equation}
+
+Where $var(\hat{S}_{(nlm)(n'l'm')})$ is the covariance matrix.
+
+Finally the smoothening of the coefficients $b^*_{nlm}$ in the
+principal basis can be computed using:
+
+\begin{equation}
+b^*_{nlm} = \dfrac{1}{1 + var(\hat{S}^*_{nlm})/{S^*_{nlm}}^2}
+\end{equation}
+
+\section{NFW Halo}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{../code/SCF/NFW_smooth.png}
+\caption{Smooth coefficients for a NFW profile.}
+\end{figure}
+
+\section{Triaxial Halos}
+
+\begin{figure}[H]
+\centering
+\minipage{0.33\textwidth}
+\includegraphics[scale=0.4]{../code/SCF/spherical.png}
+\endminipage
+\minipage{0.33\textwidth}
+\includegraphics[scale=0.4]{../code/SCF/Oblate.png}
+\endminipage
+\minipage{0.33\textwidth}
+\includegraphics[scale=0.4]{../code/SCF/Prolate.png}
+\endminipage
+\caption{Potential contours of triaxial halos. The potential is
+computed with Gadget.\label{fig:coeffMW}}
+\end{figure}
+
+
+\begin{figure}[H]
+\centering
+\minipage{0.33\textwidth}
+\includegraphics[scale=0.4]{../code/SCF/sphresiduals.png}
+\endminipage
+\minipage{0.33\textwidth}
+\includegraphics[scale=0.4]{../code/SCF/oblateresiduals.png}
+\endminipage
+\minipage{0.33\textwidth}
+\includegraphics[scale=0.4]{../code/SCF/prolateresiduals.png}
+\endminipage
+\caption{Residuals contours of the potential of triaxial halos
+computed with Gadget and the SCF method.
+\label{fig:coeffMW}}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\minipage{0.25\textwidth}
+\includegraphics[scale=0.3]{../code/SCF/Hernquistmono.png}
+\endminipage
+\minipage{0.25\textwidth}
+\includegraphics[scale=0.3]{../code/SCF/Hernquistdip.png}
+\endminipage
+\minipage{0.25\textwidth}
+\includegraphics[scale=0.3]{../code/SCF/Hernquistquad.png}
+\endminipage
+\minipage{0.25\textwidth}
+\includegraphics[scale=0.3]{../code/SCF/Hernquistoct.png}
+\endminipage
+\caption{Potential multipole contours of a spherical halo
+computed with the SCF method.\label{fig:coeffMW}}
+\end{figure}
+
+
+\begin{figure}[H]
+\centering
+\minipage{0.25\textwidth}
+\includegraphics[scale=0.3]{../code/SCF/oblatemono.png}
+\endminipage
+\minipage{0.25\textwidth}
+\includegraphics[scale=0.3]{../code/SCF/oblatedip.png}
+\endminipage
+\minipage{0.25\textwidth}
+\includegraphics[scale=0.3]{../code/SCF/oblatequad.png}
+\endminipage
+\minipage{0.25\textwidth}
+\includegraphics[scale=0.3]{../code/SCF/oblateoct.png}
+\endminipage
+\caption{Potential multipoles contours of an oblate halo
+computed with the SCF method.\label{fig:coeffMW}}
+\end{figure}
+
+
+
+\begin{figure}[H]
+\centering
+\minipage{0.33\textwidth}
+\includegraphics[scale=0.4]{../code/SCF/prolatemono.png}
+\endminipage
+\minipage{0.33\textwidth}
+\includegraphics[scale=0.4]{../code/SCF/prolatedip.png}
+\endminipage
+\minipage{0.33\textwidth}
+\includegraphics[scale=0.4]{../code/SCF/prolatequad.png}
+\endminipage
+\caption{Potential multipoles contours of a prolate halo
+computed with the SCF method.\label{fig:coeffMW}}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{../code/SCF/spherical_smooth_coef}
+\caption{Smoothen coefficients of the spherical halo}
+\end{figure}
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{../code/SCF/oblate_smooth_coef}
+\caption{Smoothen coefficients of the oblate halo}
+\end{figure}
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{../code/SCF/prolate_smooth_coef}
+\caption{Smoothen coefficients of the prolate halo}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{../code/SCF/spherical_PCA_coef}
+\caption{Smoothen coefficients in the principal basis
+for the spherical halo}
+\end{figure}
+
+
+
+\section{MW DM halo response to the LMC}
+
+
+\begin{figure}[H]
+\centering
+\minipage{0.25\textwidth}
+\includegraphics[scale=0.3]{../code/SCF/MWgadget.png}
+\endminipage
+\minipage{0.25\textwidth}
+\includegraphics[scale=0.3]{../code/SCF/MWSCF.png}
+\endminipage
+\minipage{0.25\textwidth}
+\includegraphics[scale=0.3]{../code/SCF/MWres.png}
+\endminipage
+\minipage{0.25\textwidth}
+\includegraphics[scale=0.3]{../code/SCF/MWresout.png}
+\endminipage
+\caption{Potential contours of the MW dark matter
+halo interacting with the LMC. The LMC halo is not showed
+in the figure. Left panel shows the potential computed with
+gadget. Middle panel shows the potential computed with the 
+SCF method. Right panel shows the potential residuals between
+the Gadget and the SCF computation.\label{fig:coeffMW}}
+\end{figure}
+
+
+\begin{figure}[H]
+\centering
+\minipage{0.33\textwidth}
+\includegraphics[scale=0.4]{../code/SCF/MWmonopole.png}
+\endminipage
+\minipage{0.33\textwidth}
+\includegraphics[scale=0.4]{../code/SCF/MWdipole.png}
+\endminipage
+\minipage{0.33\textwidth}
+\includegraphics[scale=0.4]{../code/SCF/MWquad.png}
+\endminipage
+\caption{Potential multipoles of the MW dark matter
+halo interacting with the LMC. Figure shows the monopole,
+dipoele and quadrupolar contribution to the potential.}
+\end{figure}
+
+
+
+\end{document}
