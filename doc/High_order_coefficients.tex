@@ -138,13 +138,63 @@ The amplitude of the terms with l=[2, 4] is larger than 0.} \label{fig:energy_ob
 even if the underlying halo is is Hernquist halo. However, the amplitude of those terms
 to the 'energy' is small as shown in the right panel of Figure \ref{fig:spherical_energy}.\\
 
+\section{BFE applied to the MW+LMC simulation}
+
+In this section, the coefficients in the BFE for the simulation with the MW and
+the LMC are computed as shown in Figure \ref{fig:MW_LMC_coeff}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.5]{../../MW-LMC-SCF/code/MWLMC_S_coeff.pdf}
+  \includegraphics[scale=0.5]{../../MW-LMC-SCF/code/MWLMC_S_coeff_energy.pdf}
+  \caption{\textit{Top:} Coefficients computed in the present-day snapshot of the MW+LMC
+  simulation. \textit{Bottom:} Corresponding energy of the coefficients. There
+  is not clear signal of an oblate or prolate halo.}\label{fig:MW_LMC_coeff}
+\end{figure}
+
+
+\subsection{BFE potential and density}
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.5]{../../MW-LMC-SCF/code/BFE_potential.pdf}
+  \includegraphics[scale=0.5]{../../MW-LMC-SCF/code/BFE_density.pdf}
+  \caption{Density (Top) and potential (Bottom) computed with the BFE. The
+  column on the left shows the potential and density using all the terms (9261
+  coefficients). Column on the middle shows the density and potential from the
+  1st term spherical halo. Column on the right shows the density and potential
+  from all the terms without including the 1st term.}
+
+\end{figure}
+
+
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.5]{../../MW-LMC-SCF/code/BFE_density_N_coeff_5.pdf}
+  \includegraphics[scale=0.5]{../../MW-LMC-SCF/code/BFE_density_N_coeff_13.pdf}
+  \includegraphics[scale=0.5]{../../MW-LMC-SCF/code/BFE_density_N_coeff_36.pdf}
+  \includegraphics[scale=0.5]{../../MW-LMC-SCF/code/BFE_density_N_coeff_84.pdf}
+  \includegraphics[scale=0.5]{../../MW-LMC-SCF/code/BFE_density_N_coeff_203.pdf}
+  \includegraphics[scale=0.5]{../../MW-LMC-SCF/code/BFE_density_N_coeff_848.pdf}
+  \caption{Density distribution computed with the BFE coefficients selected with
+  different `Energy' cuts.}
+\end{figure}
+
+
+
 \textbf{What is next:}\\
 \begin{itemize}
-\item Apply energy cut to identify coefficients that contribute to the potential/density?
-\item Compute the variance of the coefficients
-\item Apply the PCA method. 
+\item Apply energy cut to identify coefficients that contribute the most to the potential/density?
+\item Compute the variance of the coefficients to smooth noise?
+\item Apply the PCA method? 
 \item Find out the terms that contribute the most to the simulations with the LMC.
 \end{itemize}
+
+
+
 
 \bibliography{references}
 
