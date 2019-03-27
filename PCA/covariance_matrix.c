@@ -78,7 +78,7 @@ int main(int argc, char **argv){
      //char filename;
      //filename = atol(argv[4]);
 
-     char filename[100]="MWLMC5_pos.txt";
+     char filename[100]="../data/spherical_halo.txt";
      double r_s = 40.85;
 
      // ------------------------
@@ -284,13 +284,11 @@ void coefficients(int n_points, double *r , double *theta , double *phi, double 
     double All_phi_nlm_T;  
 
 
-    #pragma omp parallel for  num_threads(2)
-    int n;
+    #pragma omp for collapse(4) 
     for(n=0;n<=nmax;n++){
-        
-        for(l=0;l<=lmax;l++){
+       for(l=0;l<=lmax;l++){
             for(m=0;m<=l;m++){
-
+                       
             dm0 = 0;
 
             if(m==0){
