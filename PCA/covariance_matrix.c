@@ -50,8 +50,7 @@ void read_data(char *filename, int n_points, double *r, double *theta,\
 void cov_matrix(int n_points, double *r , double *theta , double *phi,\
                 double *m, int max, int lmax);
 
-//void coefficients(int n_points, double *r , double *theta 
-//, double *phi, double *m, int max, int lmax);
+void coefficients(int n_points, double *r , double *theta, double *phi, double *m, int max, int lmax);
 
 int main(int argc, char **argv){
      double *r=NULL;
@@ -85,7 +84,7 @@ int main(int argc, char **argv){
      M = malloc(n_points*sizeof(long double));
 
      read_data(filename, n_points, r, theta, phi, M, r_s);
-     cov_matrix(n_points, r, theta, phi, M, nmax, lmax);;
+     cov_matrix(n_points, r, theta, phi, M, nmax, lmax);
      return 0;
 }
 
@@ -222,7 +221,7 @@ void cov_matrix(int n_points, double *r , double *theta , double *phi,\
     }
 }
 
-/*
+
 void coefficients(int n_points, double *r , double *theta , double *phi, double *M, int nmax, int lmax){
 
     //
@@ -239,7 +238,11 @@ void coefficients(int n_points, double *r , double *theta , double *phi, double 
     int n, l, m, dm0;
     double A_nl;
     double All_angular;
-    double S;
+    double S, T;
+    double All_phi_nlm_S;                                                                                                        
+    double All_phi_nlm_T;  
+
+
     for(n=0;n<=nmax;n++){
         for(l=0;l<=lmax;l++){
             for(m=0;m<=l;m++){
@@ -252,15 +255,16 @@ void coefficients(int n_points, double *r , double *theta , double *phi, double 
             }
 
             A_nl = Anl_tilde(n,l);
-            All_angular = sum_angular(n_points, r, theta, phi, M, n, l, m);
-            S = (2-dm0)*A_nl*All_angular;
+            sum_angular(&All_phi_nlm_S, &All_phi_nlm_T, n_points, r, theta, phi, M, n, l, m);
+            S = (2-dm0)*A_nl*All_phi_nlm_S;
+            T = (2-dm0)*A_nl*All_phi_nlm_T;
 
             //intf("%f \t \n", S);
             }
         }
     }
 }
-*/
+
 
 void read_data(char *filename, int n_points, double *r, double *theta, \
                double *phi, double *M, double r_s){
