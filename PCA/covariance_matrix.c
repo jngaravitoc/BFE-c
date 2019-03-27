@@ -25,10 +25,11 @@ To-Do:
 5. Make # of particles not an argument.
 
 */
-
+#include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <omp.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_sf_gamma.h>
 #include <gsl/gsl_sf_gegenbauer.h>
@@ -60,6 +61,9 @@ int main(int argc, char **argv){
      double *phi=NULL;
      double *M=NULL;
 
+     clock_t start, end;
+     double cpu_time_used;
+
      if(!argv[1]){
      printf("Usage: ./a.out nmax lmax #ofparticles \n");
      }
@@ -84,9 +88,13 @@ int main(int argc, char **argv){
      theta = malloc(n_points*sizeof(long double));
      phi = malloc(n_points*sizeof(long double));
      M = malloc(n_points*sizeof(long double));
-
+     
+     start = clock();
      read_data(filename, n_points, r, theta, phi, M, r_s);
      //cov_matrix(n_points, r, theta, phi, M, nmax, lmax);
+     end = clock();
+     cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+     printf("hello %f \n", cpu_time_used);
      coefficients(n_points, r, theta, phi, M, nmax, lmax);
      return 0;
 }
@@ -276,15 +284,17 @@ void coefficients(int n_points, double *r , double *theta , double *phi, double 
     double All_phi_nlm_T;  
 
 
+    #pragma omp parallel for  num_threads(2)
+    int n;
     for(n=0;n<=nmax;n++){
+        
         for(l=0;l<=lmax;l++){
             for(m=0;m<=l;m++){
 
+            dm0 = 0;
+
             if(m==0){
-            dm0=1.0;
-            }
-            else{
-            dm0=0.0;
+            dm0 = 1.0;
             }
 
             A_nl = Anl_tilde(n,l);
