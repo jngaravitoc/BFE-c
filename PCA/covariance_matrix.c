@@ -17,10 +17,12 @@ Usage:
 
 To-Do:
 ------
-1. Write file with the results.
-2. Parallelize code.
-3. Put comments and organize code!
-4. Make # of particles not an argument.
+0. Compare with biff that the values of the coefficients are correct
+1. Comment code
+2. Write file with the results.
+3. Parallelize code.
+4. Put comments and organize code!
+5. Make # of particles not an argument.
 
 */
 
@@ -72,7 +74,7 @@ int main(int argc, char **argv){
      //char filename;
      //filename = atol(argv[4]);
 
-     char filename[100]="../data/spherical_halo.txt";
+     char filename[100]="MWLMC5_pos.txt";
      double r_s = 40.85;
 
      // ------------------------
@@ -84,35 +86,66 @@ int main(int argc, char **argv){
      M = malloc(n_points*sizeof(long double));
 
      read_data(filename, n_points, r, theta, phi, M, r_s);
-     cov_matrix(n_points, r, theta, phi, M, nmax, lmax);
+     //cov_matrix(n_points, r, theta, phi, M, nmax, lmax);
+     coefficients(n_points, r, theta, phi, M, nmax, lmax);
      return 0;
 }
 
 
 double Anl_tilde(int n ,int l){
+    /*
+    Function that computes the A_nl from Eq.16 in Lowing+16 paper
+
+    Parameters:
+    ----------
+    n, l
+
+    Return:
+    ------- 
+
+    A_nl
+    */
+    
     double K_nl, factor, A_nl;
     double gamma_factor;
 
+    // Definition of K_nl
     K_nl = 0.5*n*(n+4.*l+3.) + (l+1.)*(2.*l+1.);
+
     factor = pow(2,8.*l+6.) / (4.*M_PI*K_nl);
-    gamma_factor = pow(gsl_sf_gamma(2.0*l+1.5),2)/gsl_sf_gamma(n+4.*l+3.);
-    A_nl =-factor* gsl_sf_fact(n)*(n+2.*l+1.5)*gamma_factor;
+    gamma_factor = pow(gsl_sf_gamma(2.0*l+1.5),2) / gsl_sf_gamma(n+4.*l+3.);
+    A_nl =-factor * gsl_sf_fact(n) * (n+2.*l+1.5) * gamma_factor;
+
     return A_nl;
 }
 
 
 double phi_nl_f(double r, int n, int l){
+    /*
+    Function that computes Phi_nl using Eq.11 in Lowing+16 paper.
+
+    Parameters:
+    -----------
+    r : Distances  
+    n :
+    l
+
+    Returns:
+    -------
+    Phi_nl
+    */
     double factor, s, C_n;
     factor = pow(r, l) * pow((1.+r), (-2.*l-1.)) * pow(4*M_PI, 0.5);
     s = (r-1)/(r+1);
-    C_n = gsl_sf_gegenpoly_n(n,2*l+1.5, s);
+    C_n = gsl_sf_gegenpoly_n(n,2*l+1.5,s);
     return -factor*C_n;
 }
 
 
-/* Function that computes the potential see Eq. in Lowing*/
+/* Function that computes the potential phi_nlm in Lowing+11*/
 double phi_nlm_f(double r, double theta ,int n, int l, int m){
     double Y_lm, phi_nl;
+
     Y_lm = gsl_sf_legendre_sphPlm(l, m, cos(theta));
     phi_nl = phi_nl_f(r, n, l);
     return phi_nl*Y_lm;
@@ -259,7 +292,7 @@ void coefficients(int n_points, double *r , double *theta , double *phi, double 
             S = (2-dm0)*A_nl*All_phi_nlm_S;
             T = (2-dm0)*A_nl*All_phi_nlm_T;
 
-            //intf("%f \t \n", S);
+            printf("%f \t \n", S);
             }
         }
     }
