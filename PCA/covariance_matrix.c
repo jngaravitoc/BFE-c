@@ -34,6 +34,7 @@ To-Do:
 #include <gsl/gsl_sf_gamma.h>
 #include <gsl/gsl_sf_gegenbauer.h>
 #include <gsl/gsl_sf_legendre.h>
+#include "covariance_matrix.h"
 
 double Anl_tilde(int n, int l);
 double phi_nl_f(double r, int n, int l);
@@ -79,7 +80,7 @@ int main(int argc, char **argv){
      //char filename;
      //filename = atol(argv[4]);
 
-     char filename[100]="MWLMC5_pos.txt";
+     char filename[100]="../data/spherical_halo.txt";
      double r_s = 40.85;
 
      // ------------------------
@@ -283,31 +284,29 @@ void coefficients(int n_points, double *r , double *theta , double *phi, double 
     //
 
     int n, l, m, dm0;
-    double A_nl;
     double All_angular;
     double S, S1, T1;
     //double All_phi_nlm_S;                                                                                                        
     //double All_phi_nlm_T;  
 
 
-    #pragma omp parallel for ordered 
+    #pragma omp parallel for private(S1, S, dm0, l, m)
     for(n=0;n<=nmax;n++){
        for(l=0;l<=lmax;l++){
-            for(m=0;m<=l;m++){
-                       
-            dm0 = 0;
-
-            if(m==0){
-            dm0 = 1.0;
-            }
-
+            double A_nl;
             A_nl = Anl_tilde(n,l);
+            S1 = sum_angular(n_points, r, theta, phi, M, n, l, 0);                                                                                                       
+            S = A_nl*S1;  
+            printf("%f \n", S);
+            for(m=1;m<=l; m++){
+                       
+
             //sum_angular(&All_phi_nlm_S, &All_phi_nlm_T, n_points, r, theta, phi, M, n, l, m);
             S1 = sum_angular(n_points, r, theta, phi, M, n, l, m);
-            S = (2-dm0)*A_nl*S1;
+            S = 2.0*A_nl*S1;
             //T = (2-dm0)*A_nl*All_phi_nlm_T;
-
-            printf("%f \t \n", S);
+        
+            printf("%f \n", S);
             }
         }
     }
