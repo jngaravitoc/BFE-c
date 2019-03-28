@@ -36,27 +36,6 @@ To-Do:
 #include <gsl/gsl_sf_legendre.h>
 #include "covariance_matrix.h"
 
-double Anl_tilde(int n, int l);
-double phi_nl_f(double r, int n, int l);
-double phi_nlm_f(double r, double theta, int n, int l, int m);
-//void sum_angular(double * All_phi_S, double * All_phi_T, int n_points,\
-//                 double *r, double *theta, double *phi, double *M,\
-//                 int n, int l, int m);
-
-double sum_angular(int n_points, double *r, double *theta, double *phi, double *M, int n, int l, int m);
-void sum_angular_prod(double * All_phi_S, double * All_phi_T, int n_points,\
-                      double *r, double *theta, double *phi, double *M, \
-                      int n, int l, int m, int n_prime, int l_prime,\
-                      int m_prime);
-
-void read_data(char *filename, int n_points, double *r, double *theta,\
-               double *phi, double *m, double r_s);
-
-void cov_matrix(int n_points, double *r , double *theta , double *phi,\
-                double *m, int max, int lmax);
-
-void coefficients(int n_points, double *r , double *theta, double *phi, double *m, int max, int lmax);
-
 int main(int argc, char **argv){
      double *r=NULL;
      double *theta=NULL;
@@ -82,7 +61,6 @@ int main(int argc, char **argv){
 
      char filename[100]="../data/spherical_halo.txt";
      double r_s = 40.85;
-
      // ------------------------
 
      /* Allocating memory for pointers */
@@ -96,7 +74,7 @@ int main(int argc, char **argv){
      //cov_matrix(n_points, r, theta, phi, M, nmax, lmax);
      end = clock();
      cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-     printf("hello %f \n", cpu_time_used);
+     printf("time to load the data:  %f \n", cpu_time_used);
      coefficients(n_points, r, theta, phi, M, nmax, lmax);
      return 0;
 }
@@ -167,22 +145,22 @@ double phi_nlm_f(double r, double theta ,int n, int l, int m){
 //                 double *M, int n, int l, int m){
 
 
-double sum_angular(int n_points, double *r, double *theta, double *phi,\
+void sum_angular(double * All_phi_S, double * All_phi_T, int n_points, double *r, double *theta, double *phi,\
                  double *M, int n, int l, int m){
 
     double phi_nlm;
-    double All_phi_S, All_phi_T;
+    //double All_phi_S, All_phi_T;
     int i;
-    All_phi_S = 0;
-    All_phi_T = 0;
+    *All_phi_S = 0;
+    *All_phi_T = 0;
 
     for(i=0;i<=n_points;i++){
     phi_nlm = phi_nlm_f(r[i], theta[i], n, l, m);
-    All_phi_S += phi_nlm*cos(m*phi[i])*M[i];
-    All_phi_T += phi_nlm*sin(m*phi[i])*M[i];
+    *All_phi_S += phi_nlm*cos(m*phi[i])*M[i];
+    *All_phi_T += phi_nlm*sin(m*phi[i])*M[i];
 
     }
-    return All_phi_S;
+    //return All_phi_S;
 }
 
 
@@ -285,28 +263,33 @@ void coefficients(int n_points, double *r , double *theta , double *phi, double 
 
     int n, l, m, dm0;
     double All_angular;
-    double S, S1, T1;
-    //double All_phi_nlm_S;                                                                                                        
-    //double All_phi_nlm_T;  
+    //double All_phi_nlm_S, All_phi_nlm_T;
+    double S[nmax+1][lmax+1][lmax+1];
+    double T[nmax+1][lmax+1][lmax+1];
+    double S1;
 
+    
 
-    #pragma omp parallel for private(S1, S, dm0, l, m)
+    #pragma omp parallel for private(dm0, l, m)
     for(n=0;n<=nmax;n++){
        for(l=0;l<=lmax;l++){
+
             double A_nl;
+            double All_phi_nlm_S, All_phi_nlm_T;
+
             A_nl = Anl_tilde(n,l);
-            S1 = sum_angular(n_points, r, theta, phi, M, n, l, 0);                                                                                                       
-            S = A_nl*S1;  
-            printf("%f \n", S);
+            sum_angular(&All_phi_nlm_S, &All_phi_nlm_T, n_points, r, theta, phi, M, n, l, 0); 
+            S[n][l][0] = A_nl*All_phi_nlm_S;  
+            T[n][l][0] = A_nl*All_phi_nlm_T;  
+            printf("%f \t %f \n", S[n][l][0], T[n][l][0]); 
+
             for(m=1;m<=l; m++){
                        
-
-            //sum_angular(&All_phi_nlm_S, &All_phi_nlm_T, n_points, r, theta, phi, M, n, l, m);
-            S1 = sum_angular(n_points, r, theta, phi, M, n, l, m);
-            S = 2.0*A_nl*S1;
-            //T = (2-dm0)*A_nl*All_phi_nlm_T;
+            sum_angular(&All_phi_nlm_S, &All_phi_nlm_T, n_points, r, theta, phi, M, n, l, m);
+            S[n][l][m] = 2.0*A_nl*All_phi_nlm_S;
+            T[n][l][m] = 2.0*A_nl*All_phi_nlm_T;
         
-            printf("%f \n", S);
+            printf("%f \t %f \n", S[n][l][m], T[n][l][m]); 
             }
         }
     }
@@ -335,5 +318,26 @@ void read_data(char *filename, int n_points, double *r, double *theta, \
         phi[i] = atan2(Y, X);
         M[i] = m;
     }
+    fclose(in);
+}
+
+
+
+
+
+void write_data(char *filename, int n_points, double *S){
+
+    FILE *in;
+    double X, Y, Z, m;
+    int i;
+
+    in = fopen(filename, "w");
+
+    /* Checking if the file is opening*/
+    if(!in){
+        printf("Problem opening file %s \n", filename);
+        exit(1);
+    }
+
     fclose(in);
 }
