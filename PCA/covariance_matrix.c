@@ -38,10 +38,11 @@ To-Do:
 double Anl_tilde(int n, int l);
 double phi_nl_f(double r, int n, int l);
 double phi_nlm_f(double r, double theta, int n, int l, int m);
-void sum_angular(double * All_phi_S, double * All_phi_T, int n_points,\
-                 double *r, double *theta, double *phi, double *M,\
-                 int n, int l, int m);
+//void sum_angular(double * All_phi_S, double * All_phi_T, int n_points,\
+//                 double *r, double *theta, double *phi, double *M,\
+//                 int n, int l, int m);
 
+double sum_angular(int n_points, double *r, double *theta, double *phi, double *M, int n, int l, int m);
 void sum_angular_prod(double * All_phi_S, double * All_phi_T, int n_points,\
                       double *r, double *theta, double *phi, double *M, \
                       int n, int l, int m, int n_prime, int l_prime,\
@@ -78,7 +79,7 @@ int main(int argc, char **argv){
      //char filename;
      //filename = atol(argv[4]);
 
-     char filename[100]="../data/spherical_halo.txt";
+     char filename[100]="MWLMC5_pos.txt";
      double r_s = 40.85;
 
      // ------------------------
@@ -153,7 +154,6 @@ double phi_nl_f(double r, int n, int l){
 /* Function that computes the potential phi_nlm in Lowing+11*/
 double phi_nlm_f(double r, double theta ,int n, int l, int m){
     double Y_lm, phi_nl;
-
     Y_lm = gsl_sf_legendre_sphPlm(l, m, cos(theta));
     phi_nl = phi_nl_f(r, n, l);
     return phi_nl*Y_lm;
@@ -161,21 +161,27 @@ double phi_nlm_f(double r, double theta ,int n, int l, int m){
 
 
 /* function that sums the angular terms over all the particles */
-void sum_angular(double * All_phi_S, double * All_phi_T, \
-                 int n_points, double *r, double *theta, double *phi,\
+//double sum_angular(double * All_phi_S, double * All_phi_T, \
+//                 int n_points, double *r, double *theta, double *phi,\
+//                 double *M, int n, int l, int m){
+
+
+double sum_angular(int n_points, double *r, double *theta, double *phi,\
                  double *M, int n, int l, int m){
 
     double phi_nlm;
+    double All_phi_S, All_phi_T;
     int i;
-    *All_phi_S = 0;
-    *All_phi_T = 0;
+    All_phi_S = 0;
+    All_phi_T = 0;
 
     for(i=0;i<=n_points;i++){
     phi_nlm = phi_nlm_f(r[i], theta[i], n, l, m);
-    *All_phi_S += phi_nlm*cos(m*phi[i])*M[i];
-    *All_phi_T += phi_nlm*sin(m*phi[i])*M[i];
+    All_phi_S += phi_nlm*cos(m*phi[i])*M[i];
+    All_phi_T += phi_nlm*sin(m*phi[i])*M[i];
 
     }
+    return All_phi_S;
 }
 
 
@@ -230,12 +236,12 @@ void cov_matrix(int n_points, double *r , double *theta , double *phi,\
                 A_nl = Anl_tilde(n,l);
                 A_nl_prime = Anl_tilde(n_prime,l_prime);
 
-                sum_angular(&All_phi_nlm_S, &All_phi_nlm_T, n_points,\
-                            r, theta, phi, M, n, l, m);
+                //sum_angular(&All_phi_nlm_S, &All_phi_nlm_T, n_points,\
+                //            r, theta, phi, M, n, l, m);
 
-                sum_angular(&All_phi_nlm_prime_S, &All_phi_nlm_prime_T,\
-                            n_points, r, theta, phi, M, n_prime, \
-                            l_prime, m_prime);
+                //sum_angular(&All_phi_nlm_prime_S, &All_phi_nlm_prime_T,\
+                //            n_points, r, theta, phi, M, n_prime, \
+                //           l_prime, m_prime);
 
                 sum_angular_prod(&All_phi_nlm_mix_S, &All_phi_nlm_mix_T,\
                                  n_points, r, theta, phi, M, n, l, m,\
@@ -279,12 +285,12 @@ void coefficients(int n_points, double *r , double *theta , double *phi, double 
     int n, l, m, dm0;
     double A_nl;
     double All_angular;
-    double S, T;
-    double All_phi_nlm_S;                                                                                                        
-    double All_phi_nlm_T;  
+    double S, S1, T1;
+    //double All_phi_nlm_S;                                                                                                        
+    //double All_phi_nlm_T;  
 
 
-    #pragma omp for collapse(4) 
+    #pragma omp parallel for ordered 
     for(n=0;n<=nmax;n++){
        for(l=0;l<=lmax;l++){
             for(m=0;m<=l;m++){
@@ -296,9 +302,10 @@ void coefficients(int n_points, double *r , double *theta , double *phi, double 
             }
 
             A_nl = Anl_tilde(n,l);
-            sum_angular(&All_phi_nlm_S, &All_phi_nlm_T, n_points, r, theta, phi, M, n, l, m);
-            S = (2-dm0)*A_nl*All_phi_nlm_S;
-            T = (2-dm0)*A_nl*All_phi_nlm_T;
+            //sum_angular(&All_phi_nlm_S, &All_phi_nlm_T, n_points, r, theta, phi, M, n, l, m);
+            S1 = sum_angular(n_points, r, theta, phi, M, n, l, m);
+            S = (2-dm0)*A_nl*S1;
+            //T = (2-dm0)*A_nl*All_phi_nlm_T;
 
             printf("%f \t \n", S);
             }
