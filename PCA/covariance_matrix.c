@@ -263,7 +263,6 @@ void coefficients(int n_points, double *r , double *theta , double *phi, double 
 
     int n, l, m, dm0;
     double All_angular;
-    //double All_phi_nlm_S, All_phi_nlm_T;
     double S[nmax+1][lmax+1][lmax+1];
     double T[nmax+1][lmax+1][lmax+1];
     double S1;
@@ -281,7 +280,7 @@ void coefficients(int n_points, double *r , double *theta , double *phi, double 
             sum_angular(&All_phi_nlm_S, &All_phi_nlm_T, n_points, r, theta, phi, M, n, l, 0); 
             S[n][l][0] = A_nl*All_phi_nlm_S;  
             T[n][l][0] = A_nl*All_phi_nlm_T;  
-            printf("%f \t %f \n", S[n][l][0], T[n][l][0]); 
+            //printf("%f \t %f \n", S[n][l][0], T[n][l][0]); 
 
             for(m=1;m<=l; m++){
                        
@@ -289,10 +288,12 @@ void coefficients(int n_points, double *r , double *theta , double *phi, double 
             S[n][l][m] = 2.0*A_nl*All_phi_nlm_S;
             T[n][l][m] = 2.0*A_nl*All_phi_nlm_T;
         
-            printf("%f \t %f \n", S[n][l][m], T[n][l][m]); 
+            //printf("%f \t %f \n", S[n][l][m], T[n][l][m]); 
             }
         }
     }
+    //printf("%f \t %f \n", S[0][0][0], T[0][0][0]); 
+    write_data("test.txt", nmax, lmax, &S , &T); 
 }
 
 
@@ -325,19 +326,26 @@ void read_data(char *filename, int n_points, double *r, double *theta, \
 
 
 
-void write_data(char *filename, int n_points, double *S){
+void write_data(char *filename, int n_max, int l_max, double S[n_max][l_max][l_max], double T[n_max][l_max][l_max]){
 
-    FILE *in;
-    double X, Y, Z, m;
-    int i;
-
-    in = fopen(filename, "w");
+    FILE *out;
+    int n, l, m;
+    out = fopen(filename, "w");
 
     /* Checking if the file is opening*/
-    if(!in){
+    if(!out){
         printf("Problem opening file %s \n", filename);
         exit(1);
     }
 
-    fclose(in);
+    fprintf(out, "#S \t T \t  n \t l \t m \n");
+    for(n=0;n<=n_max;n++){
+       for(l=0;l<=l_max;l++){
+           for(m=0;m<=l;m++){
+        //printf("%lf  \n", &S[i][0][0]);
+        fprintf(out, "%lf \t  %lf \t %d \t %d \t %d \n", S[n][l][m], T[n][l][m], n, l, m);
+    }
+    }
+    }
+    fclose(out);
 }
