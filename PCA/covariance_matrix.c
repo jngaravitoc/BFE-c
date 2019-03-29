@@ -54,8 +54,9 @@ int main(int argc, char **argv){
      int n_points=atoi(argv[3]);
      //char filename;
      //filename = atol(argv[4]);
-
-     char filename[100]="../data/spherical_halo.txt";
+     printf("%s", argv[4]);
+     //char filename[100];
+     //filename = argv[4]; //"../data/spherical_halo.txt";
      double r_s = 40.85;
      // ------------------------
 
@@ -66,12 +67,12 @@ int main(int argc, char **argv){
      M = malloc(n_points*sizeof(long double));
      
      start = clock();
-     read_data(filename, n_points, r, theta, phi, M, r_s);
+     read_data(argv[4], n_points, r, theta, phi, M, r_s);
      //cov_matrix(n_points, r, theta, phi, M, nmax, lmax);
      end = clock();
      cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
      printf("time to load the data:  %f \n", cpu_time_used);
-     coefficients(n_points, r, theta, phi, M, nmax, lmax);
+     coefficients(n_points, r, theta, phi, M, nmax, lmax, argv[5]);
      return 0;
 }
 
@@ -244,7 +245,7 @@ void cov_matrix(int n_points, double *r , double *theta , double *phi,\
 }
 
 
-void coefficients(int n_points, double *r , double *theta , double *phi, double *M, int nmax, int lmax){
+void coefficients(int n_points, double *r , double *theta , double *phi, double *M, int nmax, int lmax, char *out_filename){
 
     //
     //basic function that computes the S_nlm coefficient using the
@@ -289,7 +290,7 @@ void coefficients(int n_points, double *r , double *theta , double *phi, double 
         }
     }
     //printf("%f \t %f \n", S[0][0][0], T[0][0][0]); 
-    write_data("test.txt", nmax, lmax, &S , &T); 
+    write_data(out_filename, nmax, lmax, &S , &T); 
 }
 
 
