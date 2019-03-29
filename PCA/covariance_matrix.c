@@ -17,12 +17,8 @@ Usage:
 
 To-Do:
 ------
-0. Compare with biff that the values of the coefficients are correct
-1. Comment code
-2. Write file with the results.
-3. Parallelize code.
-4. Put comments and organize code!
-5. Make # of particles not an argument.
+1. Put comments and organize code!
+2. Make # of particles not an argument.
 
 */
 #include <time.h>
@@ -344,8 +340,8 @@ void write_data(char *filename, int n_max, int l_max, double S[n_max][l_max][l_m
            for(m=0;m<=l;m++){
         //printf("%lf  \n", &S[i][0][0]);
         fprintf(out, "%lf \t  %lf \t %d \t %d \t %d \n", S[n][l][m], T[n][l][m], n, l, m);
-    }
-    }
+        }
+      }
     }
     fclose(out);
 }
