@@ -72,7 +72,8 @@ int main(int argc, char **argv){
      end = clock();
      cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
      printf("time to load the data:  %f \n", cpu_time_used);
-     coefficients(n_points, r, theta, phi, M, nmax, lmax, argv[5]);
+     //coefficients(n_points, r, theta, phi, M, nmax, lmax, argv[5]);
+     cov_matrix(n_points, r, theta, phi, M, nmax, lmax);
      return 0;
 }
 
@@ -190,9 +191,11 @@ void cov_matrix(int n_points, double *r , double *theta , double *phi,\
 
     for(n=0;n<=nmax;n++){
       for(l=0;l<=lmax;l++){
+        A_nl = Anl_tilde(n,l);
         for(m=0;m<=l;m++){
           for(n_prime=0;n_prime<=nmax;n_prime++){
             for(l_prime=0;l_prime<=lmax;l_prime++){
+              A_nl_prime = Anl_tilde(n_prime,l_prime);
               for(m_prime=0;m_prime<=l_prime;m_prime++){
 
                 if(m==0){
@@ -209,15 +212,6 @@ void cov_matrix(int n_points, double *r , double *theta , double *phi,\
                   dm0_prime=0.0;
                 }
 
-                A_nl = Anl_tilde(n,l);
-                A_nl_prime = Anl_tilde(n_prime,l_prime);
-
-                //sum_angular(&All_phi_nlm_S, &All_phi_nlm_T, n_points,\
-                //            r, theta, phi, M, n, l, m);
-
-                //sum_angular(&All_phi_nlm_prime_S, &All_phi_nlm_prime_T,\
-                //            n_points, r, theta, phi, M, n_prime, \
-                //           l_prime, m_prime);
 
                 sum_angular_prod(&All_phi_nlm_mix_S, &All_phi_nlm_mix_T,\
                                  n_points, r, theta, phi, M, n, l, m,\
@@ -262,7 +256,6 @@ void coefficients(int n_points, double *r , double *theta , double *phi, double 
     double All_angular;
     double S[nmax+1][lmax+1][lmax+1];
     double T[nmax+1][lmax+1][lmax+1];
-    double S1;
 
     
 
@@ -285,12 +278,17 @@ void coefficients(int n_points, double *r , double *theta , double *phi, double 
             S[n][l][m] = 2.0*A_nl*All_phi_nlm_S;
             T[n][l][m] = 2.0*A_nl*All_phi_nlm_T;
         
-            //printf("%f \t %f \n", S[n][l][m], T[n][l][m]); 
             }
         }
     }
-    //printf("%f \t %f \n", S[0][0][0], T[0][0][0]); 
-    write_data(out_filename, nmax, lmax, &S , &T); 
+    //ite_data(out_filename, nmax, lmax, S , T); 
+   for(n=0;n<=nmax;n++){
+     for(l=0;l<=lmax;l++){
+       for(m=0;m<=l;m++){
+          printf("%f \t %f \n", S[n][l][m], T[n][l][m]); 
+   }
+   }
+   }
 }
 
 
@@ -339,7 +337,7 @@ void write_data(char *filename, int n_max, int l_max, double S[n_max][l_max][l_m
     for(n=0;n<=n_max;n++){
        for(l=0;l<=l_max;l++){
            for(m=0;m<=l;m++){
-        //printf("%lf  \n", &S[i][0][0]);
+        printf("%f %d \n", S[n][l][m], n);
         fprintf(out, "%lf \t  %lf \t %d \t %d \t %d \n", S[n][l][m], T[n][l][m], n, l, m);
         }
       }
