@@ -181,14 +181,15 @@ void cov_matrix(int n_points, double *r , double *theta , double *phi,\
                 double *M, int nmax, int lmax){
 
     int n, l, m;
-    double A_nl;
-    double All_phi_nlm_mix_S;
-    double All_phi_nlm_mix_T;
     double S_tilde[nmax+1][lmax+1][lmax+1];
     double T_tilde;
 
+    #pragma omp parallel for private(l, m)
     for(n=0;n<=nmax;n++){
       for(l=0;l<=lmax;l++){
+        double A_nl;
+        double All_phi_nlm_mix_S;
+        double All_phi_nlm_mix_T;
         A_nl = Anl_tilde(n,l);
 
         sum_angular_prod(&All_phi_nlm_mix_S, &All_phi_nlm_mix_T,\
