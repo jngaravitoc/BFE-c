@@ -54,7 +54,7 @@ int main(int argc, char **argv){
      int n_points=atoi(argv[3]);
      //char filename;
      //filename = atol(argv[4]);
-     printf("%s", argv[4]);
+     printf("reading data %s /n", argv[4]);
      //char filename[100];
      //filename = argv[4]; //"../data/spherical_halo.txt";
      double r_s = 40.85;
@@ -182,60 +182,44 @@ void sum_angular_prod(double * All_phi_mS, double * All_phi_mT, int n_points,\
 void cov_matrix(int n_points, double *r , double *theta , double *phi,\
                 double *M, int nmax, int lmax){
 
-    int n, l, m, dm0, n_prime, l_prime, m_prime, dm0_prime;
-    double A_nl, A_nl_prime;
+    int n, l, m;
+    double A_nl;
     double All_phi_nlm_S, All_phi_nlm_prime_S, All_phi_nlm_mix_S;
     double All_phi_nlm_T, All_phi_nlm_prime_T, All_phi_nlm_mix_T;
-    double S, S_prime, SS_prime, S_cov_mat;
-    double T, T_prime, TT_prime, T_cov_mat;
+    double S_tilde[nmax][lmax][lmax];
+    double T_tilde;
 
     for(n=0;n<=nmax;n++){
       for(l=0;l<=lmax;l++){
         A_nl = Anl_tilde(n,l);
-        for(m=0;m<=l;m++){
-          for(n_prime=0;n_prime<=nmax;n_prime++){
-            for(l_prime=0;l_prime<=lmax;l_prime++){
-              A_nl_prime = Anl_tilde(n_prime,l_prime);
-              for(m_prime=0;m_prime<=l_prime;m_prime++){
 
-                if(m==0){
-                  dm0=1.0;
-                }
-                else{
-                  dm0=0.0;
-                }
+        sum_angular_prod(&All_phi_nlm_mix_S, &All_phi_nlm_mix_T,\
+                         n_points, r, theta, phi, M, n, l, 0,\
+                         n, l, 0);
+        S_tilde[n][l][0] = A_nl*A_nl*All_phi_nlm_mix_S;
+        for(m=1;m<=l;m++){
 
-                if(m_prime==0){
-                  dm0_prime=1.0;
-                }
-                else{
-                  dm0_prime=0.0;
-                }
+           sum_angular_prod(&All_phi_nlm_mix_S, &All_phi_nlm_mix_T,\
+                            n_points, r, theta, phi, M, n, l, m,\
+                            n, l, m);
 
-
-                sum_angular_prod(&All_phi_nlm_mix_S, &All_phi_nlm_mix_T,\
-                                 n_points, r, theta, phi, M, n, l, m,\
-                                 n_prime, l_prime, m_prime);
-
-                S = (2-dm0)*A_nl*All_phi_nlm_S;
-                S_prime = (2-dm0_prime)*A_nl_prime*All_phi_nlm_prime_S;
-                SS_prime = (2-dm0)*(2-dm0_prime)*A_nl*A_nl_prime*All_phi_nlm_mix_S;
-                S_cov_mat = SS_prime - S*S_prime/n_points;
-
-                /*
-                T = (2-dm0)*A_nl*All_phi_nlm_T;
-                T_prime = (2-dm0_prime)*A_nl_prime*All_phi_nlm_prime_T;
-                TT_prime = (2-dm0)*(2-dm0_prime)*A_nl*A_nl_prime*All_phi_nlm_mix_T;
-                T_cov_mat = TT_prime - T*T_prime/n_points;
-                */
-                //printf("%f \t %f \n", S_cov_mat, T_cov_mat);
-                printf("%f \n", S_cov_mat);//, T_cov_mat);
-              }
-            }
-          }
+           S_tilde[n][l][m] = 4*A_nl*A_nl*All_phi_nlm_mix_S;
+              
+            
+          
         }
       }
     }
+
+
+   for(n=0;n<=nmax;n++){
+     for(l=0;l<=lmax;l++){
+       for(m=0;m<=l;m++){
+          printf("%f \n", S_tilde[n][l][m]); 
+    }
+    }
+    }
+
 }
 
 
@@ -252,14 +236,14 @@ void coefficients(int n_points, double *r , double *theta , double *phi, double 
 
     //
 
-    int n, l, m, dm0;
+    int n, l, m;
     double All_angular;
     double S[nmax+1][lmax+1][lmax+1];
     double T[nmax+1][lmax+1][lmax+1];
 
     
 
-    #pragma omp parallel for private(dm0, l, m)
+    #pragma omp parallel for private(l, m)
     for(n=0;n<=nmax;n++){
        for(l=0;l<=lmax;l++){
 
