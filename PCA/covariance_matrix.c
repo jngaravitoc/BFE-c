@@ -10,6 +10,7 @@ Bases on Weinberg 1996 Algorithm.
 Requirements:
 -------------
 gnu/gsl
+openmp
 
 Usage:
 -------
@@ -19,8 +20,11 @@ To-Do:
 ------
 1. Put comments and organize code!
 2. Make # of particles not an argument.
+3. Write output_file
 
 */
+
+
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -55,6 +59,7 @@ int main(int argc, char **argv){
      //char filename;
      //filename = atol(argv[4]);
      printf("reading data %s /n", argv[4]);
+     printf("WTF /n");
      //char filename[100];
      //filename = argv[4]; //"../data/spherical_halo.txt";
      double r_s = 40.85;
@@ -68,7 +73,6 @@ int main(int argc, char **argv){
      
      start = clock();
      read_data(argv[4], n_points, r, theta, phi, M, r_s);
-     //cov_matrix(n_points, r, theta, phi, M, nmax, lmax);
      end = clock();
      cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
      printf("time to load the data:  %f \n", cpu_time_used);
@@ -137,17 +141,10 @@ double phi_nlm_f(double r, double theta ,int n, int l, int m){
 }
 
 
-/* function that sums the angular terms over all the particles */
-//double sum_angular(double * All_phi_S, double * All_phi_T, \
-//                 int n_points, double *r, double *theta, double *phi,\
-//                 double *M, int n, int l, int m){
-
-
 void sum_angular(double * All_phi_S, double * All_phi_T, int n_points, double *r, double *theta, double *phi,\
                  double *M, int n, int l, int m){
 
     double phi_nlm;
-    //double All_phi_S, All_phi_T;
     int i;
     *All_phi_S = 0;
     *All_phi_T = 0;
@@ -158,7 +155,6 @@ void sum_angular(double * All_phi_S, double * All_phi_T, int n_points, double *r
     *All_phi_T += phi_nlm*sin(m*phi[i])*M[i];
 
     }
-    //return All_phi_S;
 }
 
 
@@ -179,14 +175,16 @@ void sum_angular_prod(double * All_phi_mS, double * All_phi_mT, int n_points,\
       *All_phi_mT += phi_nlm*phi_nlm_prime*sin(m*phi[i])*sin(m_prime*phi[i])*M[i]*M[i];
     }
 }
+
+
 void cov_matrix(int n_points, double *r , double *theta , double *phi,\
                 double *M, int nmax, int lmax){
 
     int n, l, m;
     double A_nl;
-    double All_phi_nlm_S, All_phi_nlm_prime_S, All_phi_nlm_mix_S;
-    double All_phi_nlm_T, All_phi_nlm_prime_T, All_phi_nlm_mix_T;
-    double S_tilde[nmax][lmax][lmax];
+    double All_phi_nlm_mix_S;
+    double All_phi_nlm_mix_T;
+    double S_tilde[nmax+1][lmax+1][lmax+1];
     double T_tilde;
 
     for(n=0;n<=nmax;n++){
@@ -215,9 +213,9 @@ void cov_matrix(int n_points, double *r , double *theta , double *phi,\
    for(n=0;n<=nmax;n++){
      for(l=0;l<=lmax;l++){
        for(m=0;m<=l;m++){
-          printf("%f \n", S_tilde[n][l][m]); 
-    }
-    }
+          printf("%lf \n", S_tilde[n][l][m]); 
+        }
+      }
     }
 
 }
@@ -237,7 +235,6 @@ void coefficients(int n_points, double *r , double *theta , double *phi, double 
     //
 
     int n, l, m;
-    double All_angular;
     double S[nmax+1][lmax+1][lmax+1];
     double T[nmax+1][lmax+1][lmax+1];
 
