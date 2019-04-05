@@ -87,12 +87,10 @@ the coefficients increase exponentially with $l$.
   exponentially with $l$} \label{fig:coeff_hernquist}
 \end{figure}
 
-Figure \ref{fig:spherical_energy} shows the energy terms from Equation
-\ref{eq:energy}. The first 
 
 \begin{figure}[H]
   \centering
-  \includegraphics[scale=0.5]{../code/energy_terms_hern_a_40_1E5.pdf}
+  %\includegraphics[scale=0.5]{../code/energy_terms_hern_a_40_1E5.pdf}
   \includegraphics[scale=0.5]{../code/energy_terms_hern_a_40_1E6.pdf}
   \includegraphics[scale=0.5]{../code/energy_terms_hern_a_40_1E7.pdf}
   \caption{Terms on the potential energy as defined in equation 
@@ -145,10 +143,8 @@ the LMC are computed as shown in Figure \ref{fig:MW_LMC_coeff}.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[scale=0.5]{../../MW-LMC-SCF/code/MWLMC_S_coeff.pdf}
   \includegraphics[scale=0.5]{../../MW-LMC-SCF/code/MWLMC_S_coeff_energy.pdf}
-  \caption{\textit{Top:} Coefficients computed in the present-day snapshot of the MW+LMC
-  simulation. \textit{Bottom:} Corresponding energy of the coefficients. There
+  \caption{Gravitational potential energy of the coefficients. There
   is not clear signal of an oblate or prolate halo.}\label{fig:MW_LMC_coeff}
 \end{figure}
 
@@ -173,14 +169,18 @@ the LMC are computed as shown in Figure \ref{fig:MW_LMC_coeff}.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[scale=0.5]{../../MW-LMC-SCF/code/BFE_density_N_coeff_5.pdf}
-  \includegraphics[scale=0.5]{../../MW-LMC-SCF/code/BFE_density_N_coeff_13.pdf}
-  \includegraphics[scale=0.5]{../../MW-LMC-SCF/code/BFE_density_N_coeff_36.pdf}
-  \includegraphics[scale=0.5]{../../MW-LMC-SCF/code/BFE_density_N_coeff_84.pdf}
-  \includegraphics[scale=0.5]{../../MW-LMC-SCF/code/BFE_density_N_coeff_203.pdf}
-  \includegraphics[scale=0.5]{../../MW-LMC-SCF/code/BFE_density_N_coeff_848.pdf}
-  \caption{Density distribution computed with the BFE coefficients selected with
-  different `Energy' cuts.}
+  \includegraphics[scale=0.4]{../../MW-LMC-SCF/code/BFE_density_N_coeff_4_zero.png}
+  \includegraphics[scale=0.4]{../../MW-LMC-SCF/code/BFE_density_N_coeff_9_zero.png}
+  \includegraphics[scale=0.4]{../../MW-LMC-SCF/code/BFE_density_N_coeff_26_zero.png}
+  \includegraphics[scale=0.4]{../../MW-LMC-SCF/code/BFE_density_N_coeff_62_zero.png}
+  \includegraphics[scale=0.4]{../../MW-LMC-SCF/code/BFE_density_N_coeff_136_zero.png}
+  \includegraphics[scale=0.4]{../../MW-LMC-SCF/code/BFE_density_N_coeff_266_zero.png}
+  \includegraphics[scale=0.4]{../../MW-LMC-SCF/code/BFE_density_N_coeff_606_zero.png}
+  \includegraphics[scale=0.4]{../../MW-LMC-SCF/code/BFE_density_N_coeff_2485_zero.png}
+  \caption{Relative density $\Delta \rho=\frac{\rho_{nlm}}{\rho_{000}}-1) $surfaces computed with the BFE coefficients selected with
+  different `Energy' cuts relative to the density from the first coefficients
+  i.e $S_{000}$. The DM wake can be seen when more than 26 coefficients are
+  used.}
 \end{figure}
 
 
@@ -188,26 +188,42 @@ the LMC are computed as shown in Figure \ref{fig:MW_LMC_coeff}.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[scale=0.5]{../../MW-LMC-SCF/code/BFE_density_N_coeff_5_not_zero_term.pdf}
-  \includegraphics[scale=0.5]{../../MW-LMC-SCF/code/BFE_density_N_coeff_13_not_zero_term.pdf}
-  \includegraphics[scale=0.5]{../../MW-LMC-SCF/code/BFE_density_N_coeff_36_not_zero_term.pdf}
-  \includegraphics[scale=0.5]{../../MW-LMC-SCF/code/BFE_density_N_coeff_84_not_zero_term.pdf}
-  \includegraphics[scale=0.5]{../../MW-LMC-SCF/code/BFE_density_N_coeff_203_not_zero_term.pdf}
-  \includegraphics[scale=0.5]{../../MW-LMC-SCF/code/BFE_density_N_coeff_848_not_zero_term.pdf}
-  \caption{Density distribution computed with the BFE coefficients selected with
-  different `Energy' cuts without the first term.}
+  \includegraphics[scale=0.6]{../../MW-LMC-SCF/code/pot_convergence.pdf}
+  \caption{Percentage error between the BFE potential computed with all the
+  coefficients and the potential computed using coefficients above an energy
+  threshold. On the x-axis the energy threshold is show. When coefficients with
+  lower energy are included the percentage error decrease. Errors below 1\% are
+  found for coefficients of order larger than $n=3, l=0, m=0$}
 \end{figure}
 
 
 
 
+\begin{figure}[H]
+  \includegraphics[scale=0.5]{../../MW-LMC-SCF/code/a_convergence.pdf}
+  \caption{Percentage error between the BFE acceleration computed with all the
+  coefficients and the accleration computed using coefficients above an energy
+  threshold. On the x-axis the energy threshold is show. Errors below 1\% are
+  found for coefficients or order larger than $n=20, l=7, m=6$}
+\end{figure}
 
-\textbf{What is next:}\\
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.6]{../../MW-LMC-SCF/code/gadget_bfe.png}
+  \caption{Potential of the simulation with the MW and the LMC computed with Gadget (black dots) and with the BFE (solid
+  blue line). The difference between these two is because neither the disk
+  and the bulge potential have been added to the BFE potential.}
+\end{figure}
+
+\textbf{To-do:}\\
+
 \begin{itemize}
-\item Apply energy cut to identify coefficients that contribute the most to the potential/density?
-\item Compute the variance of the coefficients to smooth noise?
-\item Apply the PCA method? 
-\item Find out the terms that contribute the most to the simulations with the LMC.
+  \item Compute the variance of the coefficients to see if I get the same
+       coefficients as with the energy method.
+  \item Include the LMC potential. Apply the BFE to the LMC.
+  \item Include the disk potential 
 \end{itemize}
 
 
