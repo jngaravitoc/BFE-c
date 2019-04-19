@@ -203,6 +203,7 @@ void cov_matrix(int n_points, double *r , double *theta , double *phi,\
                             n, l, m);
 
            S_tilde[n][l][m] = 4*A_nl*A_nl*All_phi_nlm_mix_S;
+           T_tilde[n][l][m] = 4*A_nl*A_nl*All_phi_nlm_mix_T;
               
             
           
@@ -214,7 +215,7 @@ void cov_matrix(int n_points, double *r , double *theta , double *phi,\
    for(n=0;n<=nmax;n++){
      for(l=0;l<=lmax;l++){
        for(m=0;m<=l;m++){
-          printf("%lf \n", S_tilde[n][l][m]); 
+          printf("%8.4e \t %8.4e \n", S_tilde[n][l][m], T_tilde[n][l][m]); 
         }
       }
     }
