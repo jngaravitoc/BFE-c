@@ -8,6 +8,6 @@ void read_data(char *filename, int n_points, double *r, double *theta, double *p
 
 void write_data(char *filename, int n_max, int l_max, double S[n_max][l_max][l_max], double T[n_max][l_max][l_max]);
 
-void cov_matrix(int n_points, double *r , double *theta , double *phi, double *m, int max, int lmax);   
+void cov_matrix(int n_points, double *r , double *theta , double *phi, double *m, int max, int lmax, char *out_filename);   
 void coefficients(int n_points, double *r , double *theta, double *phi, double *M, int max, int lmax, char *out_filename);                                                                   
 

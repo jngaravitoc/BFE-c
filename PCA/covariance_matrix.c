@@ -14,13 +14,13 @@ openmp
 
 Usage:
 -------
-./a.out nmax lmax #ofparticles
+./a.out nmax lmax #ofparticles snapshot outputfile
 
 To-Do:
 ------
 1. Put comments and organize code!
 2. Make # of particles not an argument.
-3. Write output_file
+3. Read gadget snapshots.
 
 */
 
@@ -77,7 +77,7 @@ int main(int argc, char **argv){
      cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
      printf("time to load the data:  %f \n", cpu_time_used);
      //coefficients(n_points, r, theta, phi, M, nmax, lmax, argv[5]);
-     cov_matrix(n_points, r, theta, phi, M, nmax, lmax);
+     cov_matrix(n_points, r, theta, phi, M, nmax, lmax, argv[5]);
      return 0;
 }
 
@@ -178,11 +178,11 @@ void sum_angular_prod(double * All_phi_mS, double * All_phi_mT, int n_points,\
 
 
 void cov_matrix(int n_points, double *r , double *theta , double *phi,\
-                double *M, int nmax, int lmax){
+                double *M, int nmax, int lmax, char *out_filename){
 
     int n, l, m;
     double S_tilde[nmax+1][lmax+1][lmax+1];
-    double T_tilde;
+    double T_tilde[nmax+1][lmax+1][lmax+1];
 
     #pragma omp parallel for private(l, m)
     for(n=0;n<=nmax;n++){
@@ -196,6 +196,7 @@ void cov_matrix(int n_points, double *r , double *theta , double *phi,\
                          n_points, r, theta, phi, M, n, l, 0,\
                          n, l, 0);
         S_tilde[n][l][0] = A_nl*A_nl*All_phi_nlm_mix_S;
+        T_tilde[n][l][0] = A_nl*A_nl*All_phi_nlm_mix_T;
         for(m=1;m<=l;m++){
 
            sum_angular_prod(&All_phi_nlm_mix_S, &All_phi_nlm_mix_T,\
@@ -211,14 +212,15 @@ void cov_matrix(int n_points, double *r , double *theta , double *phi,\
       }
     }
 
+   write_data(out_filename,  nmax+1, lmax+1, S_tilde, T_tilde);
 
-   for(n=0;n<=nmax;n++){
-     for(l=0;l<=lmax;l++){
-       for(m=0;m<=l;m++){
-          printf("%8.4e \t %8.4e \n", S_tilde[n][l][m], T_tilde[n][l][m]); 
-        }
-      }
-    }
+   //for(n=0;n<=nmax;n++){
+   //  for(l=0;l<=lmax;l++){
+   //    for(m=0;m<=l;m++){
+   //       printf("%8.4e \t %8.4e \t %d \t %d \t %d \n", S_tilde[n][l][m], T_tilde[n][l][m], n, l, m); 
+   //     }
+   //   }
+   // }
 
 }
 
@@ -265,13 +267,14 @@ void coefficients(int n_points, double *r , double *theta , double *phi, double 
         }
     }
     //ite_data(out_filename, nmax, lmax, S , T); 
-   for(n=0;n<=nmax;n++){
-     for(l=0;l<=lmax;l++){
-       for(m=0;m<=l;m++){
-          printf("%f \t %f \n", S[n][l][m], T[n][l][m]); 
-   }
-   }
-   }
+   write_data(out_filename,  nmax+1, lmax+1, S, T);
+   //for(n=0;n<=nmax;n++){
+   //  for(l=0;l<=lmax;l++){
+   //    for(m=0;m<=l;m++){
+   //       printf("%f \t %f \n", S[n][l][m], T[n][l][m]); 
+  // }
+   //}
+   //}
 }
 
 
@@ -317,11 +320,10 @@ void write_data(char *filename, int n_max, int l_max, double S[n_max][l_max][l_m
     }
 
     fprintf(out, "#S \t T \t  n \t l \t m \n");
-    for(n=0;n<=n_max;n++){
-       for(l=0;l<=l_max;l++){
+    for(n=0;n<n_max;n++){
+       for(l=0;l<l_max;l++){
            for(m=0;m<=l;m++){
-        printf("%f %d \n", S[n][l][m], n);
-        fprintf(out, "%lf \t  %lf \t %d \t %d \t %d \n", S[n][l][m], T[n][l][m], n, l, m);
+        fprintf(out, "%8.4e \t  %8.4e \t %d \t %d \t %d \n", S[n][l][m], T[n][l][m], n, l, m);
         }
       }
     }
