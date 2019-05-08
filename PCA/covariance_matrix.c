@@ -186,6 +186,7 @@ void cov_matrix(int n_points, double *r , double *theta , double *phi,\
 
     #pragma omp parallel for private(l, m)
     for(n=0;n<=nmax;n++){
+      printf("computing coefficient n= %d \n", n);
       for(l=0;l<=lmax;l++){
         double A_nl;
         double All_phi_nlm_mix_S;
@@ -211,7 +212,7 @@ void cov_matrix(int n_points, double *r , double *theta , double *phi,\
         }
       }
     }
-
+   printf("Done computing covariance matrix and now writing the results \n");
    write_data(out_filename,  nmax+1, lmax+1, S_tilde, T_tilde);
 
    //for(n=0;n<=nmax;n++){
