@@ -34,13 +34,20 @@ To-Do:
 #include <gsl/gsl_sf_gamma.h>
 #include <gsl/gsl_sf_gegenbauer.h>
 #include <gsl/gsl_sf_legendre.h>
+
+#include "io.h"
 #include "covariance_matrix.h"
 
 int main(int argc, char **argv){
-     double *r=NULL;
+     double *r=NULL;;
      double *theta=NULL;
      double *phi=NULL;
      double *M=NULL;
+
+     double *r_rand=NULL;
+     double *theta_rand=NULL;
+     double *phi_rand=NULL;
+     double *M_rand=NULL;
 
      clock_t start, end;
      double cpu_time_used;
@@ -70,14 +77,25 @@ int main(int argc, char **argv){
      theta = malloc(n_points*sizeof(long double));
      phi = malloc(n_points*sizeof(long double));
      M = malloc(n_points*sizeof(long double));
-     
+
+
+     r_rand = malloc(n_points*sizeof(long double));
+     theta_rand = malloc(n_points*sizeof(long double));
+     phi_rand = malloc(n_points*sizeof(long double));
+     M_rand = malloc(n_points*sizeof(long double));
+
+
      start = clock();
      read_data(argv[4], n_points, r, theta, phi, M, r_s);
      end = clock();
      cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
      printf("time to load the data:  %f \n", cpu_time_used);
+     rand_sampling(n_points, r_rand, theta_rand, phi_rand, M_rand, r, theta, phi, M);
      //coefficients(n_points, r, theta, phi, M, nmax, lmax, argv[5]);
+     //coefficients(n_points, r_rand, theta_rand, phi_rand, M_rand, nmax, lmax, "coeff_rand.txt");
+     cov_matrix(n_points, r_rand, theta_rand, phi_rand, M_rand, nmax, lmax, "coeff_rand.txt");
      cov_matrix(n_points, r, theta, phi, M, nmax, lmax, argv[5]);
+
      return 0;
 }
 
@@ -90,7 +108,7 @@ double Anl_tilde(int n ,int l){
     ----------
     n, l
 
-    Return:
+    aeturn:
     ------- 
 
     A_nl
@@ -267,7 +285,7 @@ void coefficients(int n_points, double *r , double *theta , double *phi, double 
             }
         }
     }
-    //ite_data(out_filename, nmax, lmax, S , T); 
+   //ite_data(out_filename, nmax, lmax, S , T); 
    write_data(out_filename,  nmax+1, lmax+1, S, T);
    //for(n=0;n<=nmax;n++){
    //  for(l=0;l<=lmax;l++){
@@ -279,54 +297,3 @@ void coefficients(int n_points, double *r , double *theta , double *phi, double 
 }
 
 
-void read_data(char *filename, int n_points, double *r, double *theta, \
-               double *phi, double *M, double r_s){
-
-    FILE *in;
-    double X, Y, Z, m;
-    int i;
-
-    in = fopen(filename, "r");
-
-    /* Checking if the file is opening*/
-    if(!in){
-        printf("Problem opening file %s \n", filename);
-        exit(1);
-    }
-
-    for(i=0;i<=n_points;i++){
-        fscanf(in, "%lf %lf %lf %lf \n", &X, &Y, &Z, &m);
-        r[i] = pow(pow(X, 2) + pow(Y, 2) + pow(Z,2),0.5)/r_s;
-        theta[i] = acos(Z/(r[i]*r_s));
-        phi[i] = atan2(Y, X);
-        M[i] = m;
-    }
-    fclose(in);
-}
-
-
-
-
-
-void write_data(char *filename, int n_max, int l_max, double S[n_max][l_max][l_max], double T[n_max][l_max][l_max]){
-
-    FILE *out;
-    int n, l, m;
-    out = fopen(filename, "w");
-
-    /* Checking if the file is opening*/
-    if(!out){
-        printf("Problem opening file %s \n", filename);
-        exit(1);
-    }
-
-    fprintf(out, "#S \t T \t  n \t l \t m \n");
-    for(n=0;n<n_max;n++){
-       for(l=0;l<l_max;l++){
-           for(m=0;m<=l;m++){
-        fprintf(out, "%8.4e \t  %8.4e \t %d \t %d \t %d \n", S[n][l][m], T[n][l][m], n, l, m);
-        }
-      }
-    }
-    fclose(out);
-}
