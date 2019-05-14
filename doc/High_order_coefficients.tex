@@ -67,6 +67,8 @@ the Spherical harmonics see appendix \ref{sec:appendix} for details.
 
 \section{Computation of the expansion coefficients and the gravitational
 potential energy in Hernquist halos}
+
+
 \subsection{Spherical Halo:}
 
 Figure \ref{fig:coeff_hernquist} shows the value of the coefficients $S_{nlm}$
@@ -136,6 +138,67 @@ The amplitude of the terms with l=[2, 4] is larger than 0.} \label{fig:energy_ob
 even if the underlying halo is is Hernquist halo. However, the amplitude of those terms
 to the 'energy' is small as shown in the right panel of Figure \ref{fig:spherical_energy}.\\
 
+
+
+\section{BFE applied to a MW-like galaxy in isolation (no LMC).}
+
+\textbf{Strategy:}\\
+
+\begin{enumerate}
+  \item Compute the coefficients of the BFE on the DM particles of the MW using
+    snapshots with different resolutions.
+  \item Compute the accelerations of the MW DM halo particles using the BFE.
+  \item Compute the accelerations of the MW DM halo particles using
+    \verb+gadget+ particles.
+
+  \item Compare the value of the acceleration obtain with the BFE and with
+    Gadget.
+  \item Use the energy of the coefficients to select the most `energetic' coefficients to study how
+    the acceleration computation will deviate when changing the number of
+    coefficients in the BFE.
+\end{enumerate}
+
+
+
+\subsection{Potential profile:}
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.7]{../../MW-LMC-SCF/code/pot_iso_mw.pdf}
+  \caption{\textit{Upper:} Potential computed with Gadget (solid color lines)
+  and the BFE (black dashed line) for a MW-like halo with three different
+  resolutions corresponding to $10^6, 10^7, 10^8$ DM particles. For the BFE the
+  potential was computed using coefficients up to order
+  $n=20$, $l=20$ and $m=20$ in the lowest resolution DM halo. \textit{Bottom:}
+  Percentage difference between the potential computed with Gadget and the BFE.
+  In each chase, the BFE is computed with the corresponding DM halo resolution
+  using only the 1st coefficient ($n=0$, $l=0$, $m=0$) given that it is
+  the most energetic. \textbf{The main different is in the outskirts of the
+  halo, not sure yet why this is happening.}}
+\end{figure}
+
+
+\subsection{Acceleration:}
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.65]{../../MW-LMC-SCF/code/mw_iso_acc.pdf}
+  \caption{\textit{Upper:} Percentage difference in the acceleration computed with Gadget 
+  and the BFE for three MW-like halo with three different
+  resolution corresponding to $10^6, 10^7, 10^8$ DM particles. For the BFE, the
+  potential was computed using coefficients up to order
+  $n=20$, $l=20$ and $m=20$ at every resolution.
+  \textit{Bottom:}
+  Histogram of the percentage difference between the acceleration computed with Gadget and the BFE.
+  In each chase the BFE is computed with the corresponding DM halo resolution
+  using only the 1st coefficient ($n=0$, $l=0$, $m=0$) given that it is
+  the most energetic.}
+\end{figure}
+
+
+
 \section{BFE applied to the MW+LMC simulation}
 
 In this section, the coefficients in the BFE for the simulation with the MW and
@@ -144,34 +207,55 @@ the LMC are computed as shown in Figure \ref{fig:MW_LMC_coeff}.
 \begin{figure}[H]
   \centering
   \includegraphics[scale=0.5]{../../MW-LMC-SCF/code/MWLMC_S_coeff_energy.pdf}
-  \caption{Gravitational potential energy of the coefficients. There
+  \caption{Gravitational potential energy of the coefficients as a function of
+  $l$ (left panel) and $n$ (right panel). There
   is not clear signal of an oblate or prolate halo.}\label{fig:MW_LMC_coeff}
 \end{figure}
 
 
-\subsection{BFE potential and density}
+\subsection{BFE potential, density and acceleration}
 
 
 \begin{figure}[H]
   \centering
   \includegraphics[scale=0.5]{../../MW-LMC-SCF/code/BFE_potential.pdf}
   \includegraphics[scale=0.5]{../../MW-LMC-SCF/code/BFE_density.pdf}
-  \caption{Density (Top) and potential (Bottom) computed with the BFE. The
-  column on the left shows the potential and density using all the terms (9261
-  coefficients). Column on the middle shows the density and potential from the
-  1st term spherical halo. Column on the right shows the density and potential
-  from all the terms without including the 1st term.}
+  \caption{Slices in the $y$-$z$ plane of the density (Top panels) 
+  and the potential (Bottom panels) computed with the BFE. The
+  left column shows the potential and density using all the coefficients
+  in the BFE (9261 coefficients). The middle column shows the density and potential from the
+  first coefficient ($n=0$, $l=0$ and $m=0$). The right column shows the
+  density and potential contrasts $\Delta \rho$ and $\Delta \Phi$. The
+  structure of the wake is reveal in the density contrast.}
 
 \end{figure}
 
 
 
-
 \begin{figure}[H]
   \centering
-  \includegraphics[scale=0.4]{../../MW-LMC-SCF/code/BFE_density_N_coeff_4_zero.png}
-  \includegraphics[scale=0.4]{../../MW-LMC-SCF/code/BFE_density_N_coeff_9_zero.png}
-  \includegraphics[scale=0.4]{../../MW-LMC-SCF/code/BFE_density_N_coeff_26_zero.png}
+  \includegraphics[scale=0.5]{../../MW-LMC-SCF/code/accelerations_BFE_MWLMC.pdf}
+  \caption{Slice in the $y$-$z$ plane of the accelerations in each component.
+  $a_x$ top, $a_y$ middle and $a_z$ bottom. The left column shows the
+  acceleration computed with all the coefficients in the BFE. The acceleration
+  is mainly in the $a_x$ component since this component is perpendicular to the
+  $y_z$ plane. The structure of the wake is clearly seen in this acceleration
+  component. Note, the existence of a `boundary' with very low acceleration
+  values shown in purple. The middle column shows the contribution of the first
+  coefficient \textbf{Why does it have this shape?}. On the right column the
+  difference in the acceleration between the expansion with all the coefficients
+  and the first coefficient is shown. Again, the structure of the wake is reveal 
+  as negative values of in $a_x$. DM particles in the wake are accelerating
+  towards the center of the MW.}
+\end{figure}
+
+
+
+\begin{figure}[H]
+ \centering
+ \includegraphics[scale=0.4]{../../MW-LMC-SCF/code/BFE_density_N_coeff_4_zero.png}
+ \includegraphics[scale=0.4]{../../MW-LMC-SCF/code/BFE_density_N_coeff_9_zero.png}
+ \includegraphics[scale=0.4]{../../MW-LMC-SCF/code/BFE_density_N_coeff_26_zero.png}
   \includegraphics[scale=0.4]{../../MW-LMC-SCF/code/BFE_density_N_coeff_62_zero.png}
   \includegraphics[scale=0.4]{../../MW-LMC-SCF/code/BFE_density_N_coeff_136_zero.png}
   \includegraphics[scale=0.4]{../../MW-LMC-SCF/code/BFE_density_N_coeff_266_zero.png}
@@ -186,47 +270,231 @@ the LMC are computed as shown in Figure \ref{fig:MW_LMC_coeff}.
 
 
 
+%\begin{figure}[H]
+%  \centering
+%  \includegraphics[scale=0.4]{../../MW-LMC-SCF/code/BFE_density_N_coeff_20_zero.png}
+%  \includegraphics[scale=0.4]{../../MW-LMC-SCF/code/BFE_density_N_coeff_24_zero.png}
+%  \includegraphics[scale=0.4]{../../MW-LMC-SCF/code/BFE_density_N_coeff_28_zero.png}
+%  \includegraphics[scale=0.4]{../../MW-LMC-SCF/code/BFE_density_N_coeff_33_zero.png}
+%  \includegraphics[scale=0.4]{../../MW-LMC-SCF/code/BFE_density_N_coeff_37_zero.png}
+%  \includegraphics[scale=0.4]{../../MW-LMC-SCF/code/BFE_density_N_coeff_42_zero.png}
+%  \includegraphics[scale=0.4]{../../MW-LMC-SCF/code/BFE_density_N_coeff_46_zero.png}
+%  \includegraphics[scale=0.4]{../../MW-LMC-SCF/code/BFE_density_N_coeff_51_zero.png}
+%  \includegraphics[scale=0.4]{../../MW-LMC-SCF/code/BFE_density_N_coeff_55_zero.png}
+%  \includegraphics[scale=0.4]{../../MW-LMC-SCF/code/BFE_density_N_coeff_60_zero.png}
+%  \caption{Relative density $\Delta \rho=\frac{\rho_{nlm}}{\rho_{000}}-1) $surfaces computed with the BFE coefficients selected with
+%  different `Energy' cuts relative to the density from the first coefficients
+%  i.e $S_{000}$. The DM wake can be seen when more than 26 coefficients are
+%  used.}
+%\end{figure}
+
+
+
+
+
+%\begin{figure}[H]
+%  \centering
+%  \includegraphics[scale=0.55]{../../MW-LMC-SCF/code/pot_convergence.pdf}
+%  \caption{Percentage error between the BFE potential computed with all the
+%  coefficients and the potential computed using coefficients above an energy
+%  threshold. On the x-axis the energy threshold is shown. As the coefficients with
+%  lower energy are included the percentage error decreases. Errors below 1\% are
+%  found for coefficients of order larger than $n=3, l=0, m=0$}
+%\end{figure}
+
+
+
+
+%\begin{figure}[H]
+%  \includegraphics[scale=0.55]{../../MW-LMC-SCF/code/a_convergence.pdf}
+%  \caption{Percentage error between the BFE acceleration computed with all the
+%  coefficients and the acceleration computed using coefficients above an energy
+%  threshold. On the x-axis the energy threshold is shown. Errors below 1\% are
+%  found for coefficients or order larger than $n=20, l=7, m=6$}
+%\end{figure}
+
+
+
+%\begin{figure}[H]
+%  \centering
+%  \includegraphics[scale=0.6]{../../MW-LMC-SCF/code/gadget_bfe.png}
+%  \caption{Potential of the simulation with the MW and the LMC computed with Gadget (black dots) and with the BFE (solid
+%  blue line). The difference between these two is because neither the disk
+%  and the bulge potential have been added to the BFE potential.}
+%\end{figure}
+
+
+
+
 \begin{figure}[H]
   \centering
-  \includegraphics[scale=0.6]{../../MW-LMC-SCF/code/pot_convergence.pdf}
-  \caption{Percentage error between the BFE potential computed with all the
-  coefficients and the potential computed using coefficients above an energy
-  threshold. On the x-axis the energy threshold is show. When coefficients with
-  lower energy are included the percentage error decrease. Errors below 1\% are
-  found for coefficients of order larger than $n=3, l=0, m=0$}
+  \includegraphics[scale=0.65]{../../MW-LMC-SCF/code/mwlmc_acc.pdf}
+  \caption{Difference in the acceleration computed with the BFE and Gadget. On
+  the top panel the percentage difference is shown for halos with different
+  resoluion. For the low res halo (black dots) the BFE do not reproduce
+  accurately the accelration computed with Gadget in the outskirts of the halo.
+  On the bottom panel a histogram of the acuracy of the the particles is
+  summarized. The BFE is more accurate for the High resolution halo.}
+\end{figure}
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.55]{../../MW-LMC-SCF/code/mwlmc_acc_nlm_3.pdf}
+  \includegraphics[scale=0.55]{../../MW-LMC-SCF/code/mwlmc_acc_nlm_2.pdf}
+  \includegraphics[scale=0.55]{../../MW-LMC-SCF/code/mwlmc_acc_nlm_1.pdf}
+  \includegraphics[scale=0.55]{../../MW-LMC-SCF/code/mwlmc_acc_nlm_0.pdf}
+  \caption{Histogram of the accuracies in the accelerations as a function of the
+  number of coefficients (shown in the different panels).}
 \end{figure}
 
 
 
+\subsection{Optimal convergence using the signal to noise of the coefficients:}
+
+\subsubsection{Computing the signal to noise of the coefficients:}
+
+
+\begin{equation}
+  var(\hat{a}_j) = \dfrac{1}{N}{E[\Psi_j\Psi_j] - E[\Psi_j]E[\Psi_j]}
+\end{equation}
+
+Which in Lowing (2011) notation would be:
+
+\begin{equation}\label{eq:var}
+  var(S_{n,l,m}) = m \left[ \sum_{i}^{N}m_i \Psi_{n,l,m}^2(x_i)
+   - \left(\sum_{i}^{N}m_i \Psi_{n,l,m}(x_i)\right)^2
+   \right]
+\end{equation}
+
+The first term in the right hand side is the covariance matrix and
+the second term of Eq.\ref{eq:var} are the coefficients
+$\hat{S}_{n,l,m}^2$ and $\hat{T}_{n,l,m}^2$. $m$ is the particle
+mass and $\Psi_{nlm}$ is defined as:
+
+\begin{equation}
+  \Psi_{nlm}(x_i) = (2-\delta_{m,0})
+  \tilde{A}_{n,l}\Phi_{n,l}(r_i)Y_{l,m}(\theta_i)cos(m\phi_i)
+\end{equation}
+
+The covariance matrix in the Lowing (2011) notation takes the form:
+
+\begin{equation}
+  \tilde{S}_{nlm n'l'm'} = \hat{S}_{nlm} \hat{S}_{n'l'm'}
+\end{equation}
+
+The smoothening of the coefficients is computed as follows:
+
+\begin{equation}
+  bS_{nlm} = \dfrac{1}{1 + var(\hat{S}_{nlm})/{S_{nlm}}^2}
+\end{equation}
+
+\begin{equation}
+  bT_{nlm} = \dfrac{1}{1 + var(\hat{T}_{nlm})/{T_{nlm}}^2}
+\end{equation}
+
+
+
+\subsubsection{Results:}
+
+Computed and tested with \verb+Gala+ and a parallel  C code written by me. 
+
 
 \begin{figure}[H]
-  \includegraphics[scale=0.5]{../../MW-LMC-SCF/code/a_convergence.pdf}
-  \caption{Percentage error between the BFE acceleration computed with all the
-  coefficients and the accleration computed using coefficients above an energy
-  threshold. On the x-axis the energy threshold is show. Errors below 1\% are
-  found for coefficients or order larger than $n=20, l=7, m=6$}
+  \centering
+  \includegraphics[scale=0.5]{../../MW-LMC-SCF/code/energies_smoothed_n_0.pdf}
+  \caption{Comparison of the smoothed and non-smoothed terms (right panels). On the top left
+  panel the difference in the energies between the smoothed and non-smoothed
+  coefficients are shown. On the bottom left panel the value of $b$ is shown.}
+\end{figure}
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.6]{../../MW-LMC-SCF/code/smoothing.pdf}
+  \caption{Signal to noise computed using each coefficient variance for the
+  $S_{nlm}$ (left) and $T_{nlm}$ (right) coefficients. The horizontal lines
+  denote when the signal to noise is 1 (dashed line) and the suggested value of
+  0.3 by Weinberg (1996) (solid line). The number of coefficients could also be
+  picked if a cut in $b$ is made. For example, there are 6934 of 9261 coefficients with
+  $bS_{nlm}<0.3$ and 7109 of 9261 with $bT_{nlm}$}
 \end{figure}
 
 
 
 \begin{figure}[H]
   \centering
-  \includegraphics[scale=0.6]{../../MW-LMC-SCF/code/gadget_bfe.png}
-  \caption{Potential of the simulation with the MW and the LMC computed with Gadget (black dots) and with the BFE (solid
-  blue line). The difference between these two is because neither the disk
-  and the bulge potential have been added to the BFE potential.}
+  \includegraphics[scale=0.6]{../../MW-LMC-SCF/code/delta_a_ncoeff.pdf}
+  \caption{Difference in the accelerations using the smoothed (left panel) and
+  non-smoothed coefficients. }
+\end{figure}
+
+
+
+\subsubsection{Comparison with the cuts in energies.}
+
+Are the most smoothed terms related with the less energetic terms? 
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.7]{../../MW-LMC-SCF/code/common_coeff.pdf}
+  \caption{Fraction of coefficients that are common when doing cuts in energy
+  and with the smoothing.}
+\end{figure}
+
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.7]{../../MW-LMC-SCF/code/delta_a_gadget_dif_res.pdf}
+  \includegraphics[scale=0.7]{../../MW-LMC-SCF/code/delta_a_bfe_dif_res.pdf}
+  \includegraphics[scale=0.7]{../../MW-LMC-SCF/code/delta_a_gadget_bfe_dif_res.pdf}
+  \caption{Percentage difference between the acceleration $\Delta a$ computed using
+  different resolution halos. On the top panel $\Delta a$ is shown for the
+  acceleration computed with Gadget for halos with different resolutions. On the
+  middle panel $\Delta a$ is shown for the acceleration computed with the BFE.
+  On the bottom panel the differences between Gadget and BFE is shown. The
+  differences in the acceleration as a function of halo resolution is larger
+  in Gadget than using the BFE.}
+\end{figure}
+
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.7]{../../MW-LMC-SCF/code/a_disp_bfe_gadget_dif_res.pdf}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.7]{../../MW-LMC-SCF/code/da_vs_smoothing.pdf}
 \end{figure}
 
 \textbf{To-do:}\\
 
+
+
+
 \begin{itemize}
-  \item Compute the variance of the coefficients to see if I get the same
-       coefficients as with the energy method.
+  
+  \item Discuss how to choose the number of coefficients.
+  \item Should we try smoothing the density in the low res halo to see if the
+    BFE can do better? 
   \item Include the LMC potential. Apply the BFE to the LMC.
-  \item Include the disk potential 
 \end{itemize}
 
 
+\subsection{Fun plots}
+
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.5]{../../MW-LMC-SCF/code/potential_of_low_u_terms.pdf}
+  \includegraphics[scale=0.5]{../../MW-LMC-SCF/code/density_of_low_u_terms.pdf}
+  \caption{Potential (left panel) and density (right panel) of the lowest energy terms.}
+\end{figure}
 
 
 \bibliography{references}
