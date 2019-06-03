@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+//#include <hdf5.h>
 #include "io.h"
 
 
@@ -34,7 +35,35 @@ void read_data(char *filename, int n_points, double *r, double *theta, \
 
 
 
-void write_data(char *filename, int n_max, int l_max, double S[n_max][l_max][l_max], double T[n_max][l_max][l_max]){
+void write_cov(char *filename, int n_max, int l_max, \
+                double S[n_max][l_max][l_max], double T[n_max][l_max][l_max],
+                double ST[n_max][l_max][l_max]){
+
+    FILE *out;
+    int n, l, m;
+    out = fopen(filename, "w");
+
+    /* Checking if the file is opening*/
+    if(!out){
+        printf("Problem opening file %s \n", filename);
+        exit(1);
+    }
+
+
+    fprintf(out, "#S \t T \t ST \t  n \t l \t m \n");
+    for(n=0;n<n_max;n++){
+       for(l=0;l<l_max;l++){
+           for(m=0;m<=l;m++){
+        fprintf(out, "%8.4e \t  %8.4e \t %8.4e \t %d \t %d \t %d \n", S[n][l][m], T[n][l][m], ST[n][l][m], n, l, m);
+        }
+      }
+    }
+    fclose(out);
+}
+
+
+void write_coeff(char *filename, int n_max, int l_max, \
+                double S[n_max][l_max][l_max], double T[n_max][l_max][l_max]){
 
     FILE *out;
     int n, l, m;
@@ -56,6 +85,8 @@ void write_data(char *filename, int n_max, int l_max, double S[n_max][l_max][l_m
     }
     fclose(out);
 }
+
+
 
 
 void rand_sampling(int n_points, double *r_rand, double *theta_rand, double *phi_rand, double *M_rand, double *r, double *theta, double *phi, double *M){

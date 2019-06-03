@@ -1,4 +1,7 @@
-
+/* Code written by Nico Garavito-Camargo
+ * University of Arizona, 2017-2019
+ * github: jngaravitoc/SCF_tools
+ */
 
 
 #include <time.h>
@@ -74,21 +77,20 @@ int main(int argc, char **argv){
      end = clock();
      cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
      printf("time to load the data:  %f \n", cpu_time_used);
-     rand_sampling(n_points, r_rand, theta_rand, phi_rand, M_rand, r, theta, phi, M);
-     //coefficients(n_points, r, theta, phi, M, nmax, lmax, argv[5]);
+     //rand_sampling(n_points, r_rand, theta_rand, phi_rand, M_rand, r, theta, phi, M);
+     coefficients(n_points, r, theta, phi, M, nmax, lmax, argv[5]);
      //coefficients(n_points, r_rand, theta_rand, phi_rand, M_rand, nmax, lmax, "coeff_rand.txt");
 
-     cov_matrix(n_points, r, theta, phi, M, nmax, lmax, argv[5]);
+     cov_matrix(n_points, r, theta, phi, M, nmax, lmax, "cov_matrix_test.txt");
 
-     char buffer[93];
+     //char buffer[93];
     
-     
-     for(n=201;n<=300;n++){
+     /*
+     for(n=0;n<=300;n++){
      printf("Computing covariance matrix using random sampling this is trial %d out of %d \n", n, n_sampling);
      snprintf(buffer, sizeof(char) * 93, "/home/u9/jngaravitoc/codes/BFE/covariance_bootstrap/cov_matrix_rand_mwlmc5_b1_1E6_%5i.txt", n);
      rand_sampling(n_points, r_rand, theta_rand, phi_rand, M_rand, r, theta, phi, M);
      cov_matrix(n_points, r_rand, theta_rand, phi_rand, M_rand, nmax, lmax, buffer);
-     }
-
+     }*/
      return 0;
 }
