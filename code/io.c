@@ -54,7 +54,7 @@ void write_cov(char *filename, int n_max, int l_max, \
     for(n=0;n<n_max;n++){
        for(l=0;l<l_max;l++){
            for(m=0;m<=l;m++){
-        fprintf(out, "%8.4e \t  %8.4e \t %8.4e \t %d \t %d \t %d \n", S[n][l][m], T[n][l][m], ST[n][l][m], n, l, m);
+        fprintf(out, "%8.12e \t  %8.12e \t %8.12e \t %d \t %d \t %d \n", S[n][l][m], T[n][l][m], ST[n][l][m], n, l, m);
         }
       }
     }
@@ -79,7 +79,7 @@ void write_coeff(char *filename, int n_max, int l_max, \
     for(n=0;n<n_max;n++){
        for(l=0;l<l_max;l++){
            for(m=0;m<=l;m++){
-        fprintf(out, "%8.4e \t  %8.4e \t %d \t %d \t %d \n", S[n][l][m], T[n][l][m], n, l, m);
+        fprintf(out, "%8.12e \t  %8.12e \t %d \t %d \t %d \n", S[n][l][m], T[n][l][m], n, l, m);
         }
       }
     }

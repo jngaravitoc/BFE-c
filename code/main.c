@@ -81,7 +81,7 @@ int main(int argc, char **argv){
      coefficients(n_points, r, theta, phi, M, nmax, lmax, argv[5]);
      //coefficients(n_points, r_rand, theta_rand, phi_rand, M_rand, nmax, lmax, "coeff_rand.txt");
 
-     cov_matrix(n_points, r, theta, phi, M, nmax, lmax, "cov_matrix_test.txt");
+     cov_matrix(n_points, r, theta, phi, M, nmax, lmax, "cov_matrix_test_1e6.txt");
 
      //char buffer[93];
     
