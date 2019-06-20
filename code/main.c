@@ -48,10 +48,11 @@ int main(int argc, char **argv){
      //char filename;
      //filename = atol(argv[4]);
      printf("reading data %s /n", argv[4]);
-     printf("WTF /n");
+     int init_sampling = atoi(argv[5]);
+     int final_sampling = atoi(argv[6]);
      //char filename[100];
      //filename = argv[4]; //"../data/spherical_halo.txt";
-     double r_s = 40.85;
+     double r_s = atof(argv[7]);
      // ------------------------
 
 
@@ -78,19 +79,21 @@ int main(int argc, char **argv){
      cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
      printf("time to load the data:  %f \n", cpu_time_used);
      //rand_sampling(n_points, r_rand, theta_rand, phi_rand, M_rand, r, theta, phi, M);
-     coefficients(n_points, r, theta, phi, M, nmax, lmax, argv[5]);
+     //coefficients(n_points, r, theta, phi, M, nmax, lmax, argv[5]);
      //coefficients(n_points, r_rand, theta_rand, phi_rand, M_rand, nmax, lmax, "coeff_rand.txt");
 
-     cov_matrix(n_points, r, theta, phi, M, nmax, lmax, "cov_matrix_test_1e6.txt");
+     //cov_matrix(n_points, r, theta, phi, M, nmax, lmax, "cov_matrix_test_1e6.txt");
 
-     //char buffer[93];
+     char buffer1[93], buffer2[93];
     
-     /*
-     for(n=0;n<=300;n++){
+     
+     for(n=init_sampling;n<=final_sampling;n++){
      printf("Computing covariance matrix using random sampling this is trial %d out of %d \n", n, n_sampling);
-     snprintf(buffer, sizeof(char) * 93, "/home/u9/jngaravitoc/codes/BFE/covariance_bootstrap/cov_matrix_rand_mwlmc5_b1_1E6_%5i.txt", n);
+     snprintf(buffer1, sizeof(char) * 93, "/home/u9/jngaravitoc/bfe_sims/lmc_particles/cov_matrix_rand_lmc5_1E6_%04i.txt", n);
+     snprintf(buffer2, sizeof(char) * 93, "/home/u9/jngaravitoc/bfe_sims/lmc_particles/coeff_rand_lmc5_1E6_%04i.txt", n);
      rand_sampling(n_points, r_rand, theta_rand, phi_rand, M_rand, r, theta, phi, M);
-     cov_matrix(n_points, r_rand, theta_rand, phi_rand, M_rand, nmax, lmax, buffer);
-     }*/
+     coefficients(n_points, r_rand, theta_rand, phi_rand, M_rand, nmax, lmax, buffer2);
+     cov_matrix(n_points, r_rand, theta_rand, phi_rand, M_rand, nmax, lmax, buffer1);
+     }
      return 0;
 }
