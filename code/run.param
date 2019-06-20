@@ -1,0 +1,28 @@
+%--------- I/O File, path names, and formats  ----------------
+
+InputDir ./
+InputFile mwlmc.txt
+InputFormat 0 % ASCII (0), Gadget (1), HDF5(2)
+
+OutputDir  ./ 
+OutputFile  mw_test
+OutputFormat 1 % ASCII (1)
+
+%--------- Halo properties ----------------------
+
+N_particles  1000 % Number of particles
+r_s          40.85 % Scale length of the Hernquist halo.
+
+%--------- BFE parameters ---------------------
+
+nmax    20 % Maximum order of the expansion in n
+lmax    20 % Maximum order of the expansion in l
+
+
+%------------ Smoothing parameters -----------
+
+CovMatrix         1 
+BootstrapSample   1 
+NSampling         1000 % if 0 and Bootstrap 0 
+smoothing         0
+
