@@ -1,8 +1,6 @@
 #include "allvars.h"
 
-int charlength = 16;
-char tmpstr1[nchar];                                                                                                                                                    
-char tmpstr2[nchar];                                                                     
+int nchar=16;
 char InputDir[nchar];                                                                                                                                             
 char InputFile[nchar];                                                                                                                                                
 char OutputDir[nchar];                                                                                                                                                   
