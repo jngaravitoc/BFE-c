@@ -67,9 +67,7 @@ int main(int argc, char **argv){
      
      n_sampling = pow(n_points,0.5);
        
-     strcat(out_path, out_snap);
-     strcat(in_path, in_snap);
-
+     
      /* Allocating memory for pointers */
      r = malloc(n_points*sizeof(long double));
      theta = malloc(n_points*sizeof(long double));
@@ -86,13 +84,15 @@ int main(int argc, char **argv){
      
      start = clock();
 
-     char buffer_str_in[100];
-     char in_file[100];
-     snprintf(buffer_str_in, sizeof(char)*100, "_%03i.txt",n_snaps);
+     char buffer_str_in[10];
+     char in_file[500];
+     
+     snprintf(buffer_str_in, sizeof(char)*10, "_%03i.txt",n_snaps);
      strcpy(in_file, in_path);
+     strcat(in_file, in_snap);
      strcat(in_file, buffer_str_in);
 
-     printf("reading data %s /n", in_file);
+     printf("reading data %s \n", in_file);
 
      read_data(in_file, n_points, r, theta, phi, M, r_s);
      end = clock();
@@ -100,16 +100,16 @@ int main(int argc, char **argv){
      cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
      printf("time to load the data:  %f \n", cpu_time_used);
 
-     char buffer_str_coeff[100], buffer_str_cov[100];
-     char out_coeff[100], out_covmat[100];
+     char buffer_str_coeff[500], buffer_str_cov[500];
+     char out_coeff[500], out_covmat[500];
     
 
      if(sampling==1){     
      for(n=init_sampling;n<=final_sampling;n++){
      printf("Computing covariance matrix using random sampling this is trial %d out of %d \n", n, n_sampling);
 
-     snprintf(buffer_str_coeff, sizeof(char) * 100, "_coeff_sample_%04i_snap_%04i.txt", n, n_snaps);
-     snprintf(buffer_str_cov, sizeof(char) * 100, "_covmat_sample_%04i_snap_%04i.txt", n, n_snaps);
+     snprintf(buffer_str_coeff, sizeof(char) * 500, "_coeff_sample_%04i_snap_%04i.txt", n, n_snaps);
+     snprintf(buffer_str_cov, sizeof(char) * 500, "_covmat_sample_%04i_snap_%04i.txt", n, n_snaps);
      
      strcpy(out_coeff, out_path);
      strcpy(out_covmat, out_path);
@@ -125,8 +125,8 @@ int main(int argc, char **argv){
      else{
      n=0;
 
-     snprintf(buffer_str_coeff, sizeof(char) * 100, "_coeff_sample_%04i_snap_%04i.txt", n, n_snaps);
-     snprintf(buffer_str_cov, sizeof(char) * 100, "_covmat_sample_%04i_snap_%04i.txt", n, n_snaps);
+     snprintf(buffer_str_coeff, sizeof(char) * 500, "_coeff_sample_%04i_snap_%04i.txt", n, n_snaps);
+     snprintf(buffer_str_cov, sizeof(char) * 500, "_covmat_sample_%04i_snap_%04i.txt", n, n_snaps);
      
      strcpy(out_coeff, out_path);
      strcpy(out_covmat, out_path);
