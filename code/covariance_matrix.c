@@ -138,7 +138,7 @@ void sum_angular_prod(double * All_phi_mS, double * All_phi_mT, double * All_phi
 
 
 void cov_matrix(int n_points, double *r , double *theta , double *phi,\
-                double *M, int nmax, int lmax, char *out_filename){
+                double *M, int nmax, int lmax, char *out_filename, char *out_mass){
 
     int n, l, m;
     double S_tilde[nmax+1][lmax+1][lmax+1];
@@ -178,6 +178,7 @@ void cov_matrix(int n_points, double *r , double *theta , double *phi,\
     }
    printf("Done computing covariance matrix and now writing the results \n");
    write_cov(out_filename,  nmax+1, lmax+1, S_tilde, T_tilde, ST_tilde);
+   write_mass(out_mass, M, n_points);
 
 }
 
