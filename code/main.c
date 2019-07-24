@@ -3,7 +3,6 @@
  * github: jngaravitoc/SCF_tools
  */
 
-
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,8 +16,6 @@
 
 #include "io.h"
 #include "covariance_matrix.h"
-
-
 
 int main(int argc, char **argv){
      double *r=NULL;;
@@ -46,19 +43,20 @@ int main(int argc, char **argv){
      // TO-DO: The code should recognize the number of particles in
      // the file.
      int n_points=atoi(argv[3]);
+     int n_samples=atoi(argv[4]);
 
-     char *in_path = argv[4];
-     char *in_snap = argv[5];
-     char *out_path = argv[6];
-     char *out_snap = argv[7];
+     char *in_path = argv[5];
+     char *in_snap = argv[6];
+     char *out_path = argv[7];
+     char *out_snap = argv[8];
 
 
-     int init_sampling = atoi(argv[8]);
-     int final_sampling = atoi(argv[9]);
-     int init_snap = atoi(argv[10]);
-     int final_snap = atoi(argv[11]);
-     double r_s = atof(argv[12]);
-     int sampling = atoi(argv[13]);
+     int init_sampling = atoi(argv[9]);
+     int final_sampling = atoi(argv[10]);
+     int init_snap = atoi(argv[11]);
+     int final_snap = atoi(argv[12]);
+     double r_s = atof(argv[13]);
+     int sampling = atoi(argv[14]);
 
      int n, n_sampling;
      int n_snaps;
@@ -86,12 +84,13 @@ int main(int argc, char **argv){
 
      char buffer_str_in[10];
      char in_file[500];
-     
-     snprintf(buffer_str_in, sizeof(char)*10, "_%03i.txt",n_snaps);
+     char mass_file[500];
+     char ext_file[40];
      strcpy(in_file, in_path);
      strcat(in_file, in_snap);
-     strcat(in_file, buffer_str_in);
-
+     snprintf(ext_file, sizeof(char)*40, "_%03i_rand_sample.txt", n_snaps);
+     strcat(in_file, ext_file);
+     
      printf("reading data %s \n", in_file);
 
      read_data(in_file, n_points, r, theta, phi, M, r_s);
@@ -100,23 +99,29 @@ int main(int argc, char **argv){
      cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
      printf("time to load the data:  %f \n", cpu_time_used);
 
-     char buffer_str_coeff[500], buffer_str_cov[500];
+     char buffer_str_coeff[40], buffer_str_cov[40];
      char out_coeff[500], out_covmat[500];
     
 
      if(sampling==1){     
      for(n=init_sampling;n<=final_sampling;n++){
+      
+     printf("Sampling particles \n");
      printf("Computing covariance matrix using random sampling this is trial %d out of %d \n", n, n_sampling);
 
-     snprintf(buffer_str_coeff, sizeof(char) * 500, "_coeff_sample_%04i_snap_%04i.txt", n, n_snaps);
-     snprintf(buffer_str_cov, sizeof(char) * 500, "_covmat_sample_%04i_snap_%04i.txt", n, n_snaps);
+     snprintf(buffer_str_coeff, sizeof(char) * 40, "_coeff_sample_%04i_snap_%04i.txt", n, n_snaps);
+     snprintf(buffer_str_cov, sizeof(char) * 40, "_covmat_sample_%04i_snap_%04i.txt", n, n_snaps);
      
      strcpy(out_coeff, out_path);
      strcpy(out_covmat, out_path);
+     strcat(out_coeff, out_snap);
+     strcat(out_covmat, out_snap);
      strcat(out_coeff, buffer_str_coeff);
      strcat(out_covmat, buffer_str_cov);
-     
-     rand_sampling(n_points, r_rand, theta_rand, phi_rand, M_rand, r, theta, phi, M);
+
+
+
+     rand_sampling(n_points, n_samples, r_rand, theta_rand, phi_rand, M_rand, r, theta, phi, M);
      coefficients(n_points, r_rand, theta_rand, phi_rand, M_rand, nmax, lmax, out_coeff);
      cov_matrix(n_points, r_rand, theta_rand, phi_rand, M_rand, nmax, lmax, out_covmat);
      }     
@@ -125,11 +130,13 @@ int main(int argc, char **argv){
      else{
      n=0;
 
-     snprintf(buffer_str_coeff, sizeof(char) * 500, "_coeff_sample_%04i_snap_%04i.txt", n, n_snaps);
-     snprintf(buffer_str_cov, sizeof(char) * 500, "_covmat_sample_%04i_snap_%04i.txt", n, n_snaps);
+     snprintf(buffer_str_coeff, sizeof(char) * 40, "_coeff_sample_%04i_snap_%04i.txt", n, n_snaps);
+     snprintf(buffer_str_cov, sizeof(char) * 40, "_covmat_sample_%04i_snap_%04i.txt", n, n_snaps);
      
      strcpy(out_coeff, out_path);
      strcpy(out_covmat, out_path);
+     strcat(out_coeff, out_snap);
+     strcat(out_covmat, out_snap);
      strcat(out_coeff, buffer_str_coeff);
      strcat(out_covmat, buffer_str_cov);
      
