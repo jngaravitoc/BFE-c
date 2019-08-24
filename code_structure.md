@@ -10,14 +10,3 @@ e=>end: write coefficients
 st->op1->op2->op3->op3->op4->op5->e
 
 ```
-
-```flow
-st=>start: Start
-op=>operation: Your Operation
-cond=>condition: Yes or No?
-e=>end
-
-st->op->cond
-cond(yes)->e
-cond(no)->op
-```
