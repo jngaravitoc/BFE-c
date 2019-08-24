@@ -21,6 +21,9 @@ Install:
 Dependencies:
 -------------
 
+- gsl
+- openmp 
+
 How to run:
 -----------
 
