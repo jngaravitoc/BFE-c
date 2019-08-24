@@ -1,4 +1,4 @@
-cBFE_coefficients
+cBFE
 ==========
 
 The code computes coefficients of the Henrquist Basis Field Expansion () from snapshots of N-body simulations. 
