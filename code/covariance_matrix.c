@@ -178,7 +178,7 @@ void cov_matrix(int n_points, double *r , double *theta , double *phi,\
     }
    printf("Done computing covariance matrix and now writing the results \n");
    write_cov(out_filename,  nmax+1, lmax+1, S_tilde, T_tilde, ST_tilde);
-   write_mass(out_mass, M, n_points);
+   //write_mass(out_mass, M, n_points);
 
 }
 

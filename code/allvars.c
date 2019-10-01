@@ -1,11 +1,9 @@
 #include "allvars.h"
 
-int nchar=16;
-char InputDir[nchar];                                                                                                                                             
-char InputFile[nchar];                                                                                                                                                
-char OutputDir[nchar];                                                                                                                                                   
-char OutputFile[nchar];                                                                                                                                                  
-
+int nchar=15;
+extern char InputDir[nchar];                                                                                                                                             
+extern char InputFile[nchar];                                                                                                                                            extern char OutputDir[nchar];
+extern char OutputFile[nchar];
 int *InputFormat;                                                                                                                                                       
 int *OutputFormat;                                                                                                                                                      
 int *Nparticles;                                                                                                                                                        

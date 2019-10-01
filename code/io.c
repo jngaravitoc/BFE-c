@@ -89,7 +89,7 @@ void write_coeff(char *filename, int n_max, int l_max, \
 
 
 
-void rand_sampling(int n_points, double *r_rand, double *theta_rand, double *phi_rand, double *M_rand, double *r, double *theta, double *phi, double *M){
+void rand_sampling(int n_points, int n_samplings, double *r_rand, double *theta_rand, double *phi_rand, double *M_rand, double *r, double *theta, double *phi, double *M){
     srand(time(NULL));   
     int n;
     int rn;

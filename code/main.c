@@ -85,12 +85,11 @@ int main(int argc, char **argv){
      char buffer_str_in[10];
      char in_file[500];
      char mass_file[500];
-     char ext_file[40];
+     char ext_file[50];
      strcpy(in_file, in_path);
      strcat(in_file, in_snap);
-     snprintf(ext_file, sizeof(char)*40, "_%03i_rand_sample.txt", n_snaps);
+     snprintf(ext_file, sizeof(char)*50, "_%03i_rand_sample.txt", n_snaps);
      strcat(in_file, ext_file);
-     
      printf("reading data %s \n", in_file);
 
      read_data(in_file, n_points, r, theta, phi, M, r_s);
@@ -123,7 +122,7 @@ int main(int argc, char **argv){
 
      rand_sampling(n_points, n_samples, r_rand, theta_rand, phi_rand, M_rand, r, theta, phi, M);
      coefficients(n_points, r_rand, theta_rand, phi_rand, M_rand, nmax, lmax, out_coeff);
-     cov_matrix(n_points, r_rand, theta_rand, phi_rand, M_rand, nmax, lmax, out_covmat);
+     cov_matrix(n_points, r_rand, theta_rand, phi_rand, M_rand, nmax, lmax, out_covmat, "test_out_mass.txt");
      }     
      }
 
@@ -142,7 +141,7 @@ int main(int argc, char **argv){
      
   
      coefficients(n_points, r, theta, phi, M, nmax, lmax, out_coeff);
-     cov_matrix(n_points, r, theta, phi, M, nmax, lmax, out_covmat);
+     cov_matrix(n_points, r, theta, phi, M, nmax, lmax, out_covmat, "out_mass_text.txt");
 
      }
      } 
