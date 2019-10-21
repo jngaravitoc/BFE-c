@@ -40,7 +40,7 @@ int main(int argc, char **argv){
      /* Global variables */
      int nmax= atof(argv[1]);
      int lmax= atof(argv[2]);
-     // TO-DO: The code should recognize the number of particles in
+     // TODO: The code should recognize the number of particles in
      // the file.
      int n_points=atoi(argv[3]);
      int n_samples=atoi(argv[4]);
@@ -51,19 +51,17 @@ int main(int argc, char **argv){
      char *out_snap = argv[8];
 
 
-     int init_sampling = atoi(argv[9]);
-     int final_sampling = atoi(argv[10]);
-     int init_snap = atoi(argv[11]);
-     int final_snap = atoi(argv[12]);
-     double r_s = atof(argv[13]);
-     int sampling = atoi(argv[14]);
+     int n_sampling = atoi(argv[9]);
+     int init_snap = atoi(argv[10]);
+     int final_snap = atoi(argv[11]);
+     double r_s = atof(argv[12]);
 
-     int n, n_sampling;
+     int n;
      int n_snaps;
 
 
      
-     n_sampling = pow(n_points,0.5);
+     //sampling = pow(n_points,0.5);
        
      
      /* Allocating memory for pointers */
@@ -102,11 +100,11 @@ int main(int argc, char **argv){
      char out_coeff[500], out_covmat[500];
     
 
-     if(sampling==1){     
-     for(n=init_sampling;n<=final_sampling;n++){
+     if(n_samples>1){     
+     for(n=0;n<=n_samples;n++){
       
      printf("Sampling particles \n");
-     printf("Computing covariance matrix using random sampling this is trial %d out of %d \n", n, n_sampling);
+     printf("Computing covariance matrix using random sampling this is trial %d out of %d \n", n, n_samples);
 
      snprintf(buffer_str_coeff, sizeof(char) * 40, "_coeff_sample_%04i_snap_%04i.txt", n, n_snaps);
      snprintf(buffer_str_cov, sizeof(char) * 40, "_covmat_sample_%04i_snap_%04i.txt", n, n_snaps);
@@ -120,9 +118,9 @@ int main(int argc, char **argv){
 
 
 
-     rand_sampling(n_points, n_samples, r_rand, theta_rand, phi_rand, M_rand, r, theta, phi, M);
-     coefficients(n_points, r_rand, theta_rand, phi_rand, M_rand, nmax, lmax, out_coeff);
-     cov_matrix(n_points, r_rand, theta_rand, phi_rand, M_rand, nmax, lmax, out_covmat, "test_out_mass.txt");
+     rand_sampling(n_sampling,  r_rand, theta_rand, phi_rand, M_rand, r, theta, phi, M);
+     coefficients(n_sampling, r_rand, theta_rand, phi_rand, M_rand, nmax, lmax, out_coeff);
+     cov_matrix(n_sampling, r_rand, theta_rand, phi_rand, M_rand, nmax, lmax, out_covmat);
      }     
      }
 
@@ -141,7 +139,7 @@ int main(int argc, char **argv){
      
   
      coefficients(n_points, r, theta, phi, M, nmax, lmax, out_coeff);
-     cov_matrix(n_points, r, theta, phi, M, nmax, lmax, out_covmat, "out_mass_text.txt");
+     cov_matrix(n_points, r, theta, phi, M, nmax, lmax, out_covmat);
 
      }
      } 

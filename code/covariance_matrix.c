@@ -20,7 +20,6 @@ To-Do:
 ------
 1. Put comments and organize code!
 2. Make # of particles not an argument.
-3. Read gadget snapshots.
 
 */
 
@@ -138,7 +137,7 @@ void sum_angular_prod(double * All_phi_mS, double * All_phi_mT, double * All_phi
 
 
 void cov_matrix(int n_points, double *r , double *theta , double *phi,\
-                double *M, int nmax, int lmax, char *out_filename, char *out_mass){
+                double *M, int nmax, int lmax, char *out_filename){
 
     int n, l, m;
     double S_tilde[nmax+1][lmax+1][lmax+1];
