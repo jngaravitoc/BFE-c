@@ -1,6 +1,6 @@
 /* Code written by Nico Garavito-Camargo
  * University of Arizona, 2017-2019
- * github: jngaravitoc/SCF_tools
+ * github: jngaravitoc/BFE-c
  */
 
 #include <time.h>
@@ -30,11 +30,6 @@ int main(int argc, char **argv){
 
      clock_t start, end;
      double cpu_time_used;
-
-
-     if(!argv[1]){
-     printf("Usage: ./a.out nmax lmax #ofparticles \n");
-     }
 
 
      /* Global variables */
@@ -86,7 +81,7 @@ int main(int argc, char **argv){
      char ext_file[50];
      strcpy(in_file, in_path);
      strcat(in_file, in_snap);
-     snprintf(ext_file, sizeof(char)*50, "_%03i_rand_sample.txt", n_snaps);
+     snprintf(ext_file, sizeof(char)*50, "_%03i.txt", n_snaps);
      strcat(in_file, ext_file);
      printf("reading data %s \n", in_file);
 
@@ -94,9 +89,9 @@ int main(int argc, char **argv){
      end = clock();
 
      cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-     printf("time to load the data:  %f \n", cpu_time_used);
+     printf("time to load the snapshot:  %f \n", cpu_time_used);
 
-     char buffer_str_coeff[40], buffer_str_cov[40];
+     char buffer_str_coeff[60], buffer_str_cov[60];
      char out_coeff[500], out_covmat[500];
     
 
@@ -106,8 +101,8 @@ int main(int argc, char **argv){
      printf("Sampling particles \n");
      printf("Computing covariance matrix using random sampling this is trial %d out of %d \n", n, n_samples);
 
-     snprintf(buffer_str_coeff, sizeof(char) * 40, "_coeff_sample_%04i_snap_%04i.txt", n, n_snaps);
-     snprintf(buffer_str_cov, sizeof(char) * 40, "_covmat_sample_%04i_snap_%04i.txt", n, n_snaps);
+     snprintf(buffer_str_coeff, sizeof(char) * 60, "_coeff_sample_%04i_snap_%04i.txt", n, n_snaps);
+     snprintf(buffer_str_cov, sizeof(char) * 60, "_covmat_sample_%04i_snap_%04i.txt", n, n_snaps);
      
      strcpy(out_coeff, out_path);
      strcpy(out_covmat, out_path);
@@ -119,7 +114,10 @@ int main(int argc, char **argv){
 
 
      rand_sampling(n_sampling,  r_rand, theta_rand, phi_rand, M_rand, r, theta, phi, M);
+     printf("Done sampling halo \n");
+     printf("Computing coefficients \n");
      coefficients(n_sampling, r_rand, theta_rand, phi_rand, M_rand, nmax, lmax, out_coeff);
+     printf("Computing covariance matrix \n");
      cov_matrix(n_sampling, r_rand, theta_rand, phi_rand, M_rand, nmax, lmax, out_covmat);
      }     
      }
@@ -127,8 +125,8 @@ int main(int argc, char **argv){
      else{
      n=0;
 
-     snprintf(buffer_str_coeff, sizeof(char) * 40, "_coeff_sample_%04i_snap_%04i.txt", n, n_snaps);
-     snprintf(buffer_str_cov, sizeof(char) * 40, "_covmat_sample_%04i_snap_%04i.txt", n, n_snaps);
+     snprintf(buffer_str_coeff, sizeof(char) * 60, "_coeff_sample_%04i_snap_%04i.txt", n, n_snaps);
+     snprintf(buffer_str_cov, sizeof(char) * 60, "_covmat_sample_%04i_snap_%04i.txt", n, n_snaps);
      
      strcpy(out_coeff, out_path);
      strcpy(out_covmat, out_path);
@@ -138,8 +136,11 @@ int main(int argc, char **argv){
      strcat(out_covmat, buffer_str_cov);
      
   
+     printf("Computing coefficients \n");
      coefficients(n_points, r, theta, phi, M, nmax, lmax, out_coeff);
+     printf("Computing covariance matrix \n");
      cov_matrix(n_points, r, theta, phi, M, nmax, lmax, out_covmat);
+     printf("Done computing covariance matrix \n");
 
      }
      } 
