@@ -139,6 +139,4 @@ void read_data_sample(char *filename, int n_points, double *r, double *theta, \
         printf("%f \t %f \t %f \n", r[rn], theta[rn], phi[rn]);
 
     }
-
-
 }
