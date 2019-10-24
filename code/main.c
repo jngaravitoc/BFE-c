@@ -55,7 +55,6 @@ int main(int argc, char **argv){
      int n;
      int n_snaps;
 
-
      
      //sampling = pow(n_points,0.5);
        
