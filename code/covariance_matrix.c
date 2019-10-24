@@ -182,7 +182,8 @@ void cov_matrix(int n_points, double *r , double *theta , double *phi,\
 }
 
 
-void coefficients(int n_points, double *r , double *theta , double *phi, double *M, int nmax, int lmax, char *out_filename){
+void coefficients(int n_points, double *r , double *theta , double *phi,\
+                  double *M, int nmax, int lmax, char *out_filename, int covariance){
 
     //
     //basic function that computes the S_nlm coefficient using the
@@ -191,10 +192,17 @@ void coefficients(int n_points, double *r , double *theta , double *phi, double 
 
     //
 
+    if (covariance != 1 && covariance !=0){
+    printf("Error: covariance argument has to be 1 or 0. Exiting the program ... \n");
+    exit(0);
+    }
+
     int n, l, m;
     double S[nmax+1][lmax+1][lmax+1];
     double T[nmax+1][lmax+1][lmax+1];
-
+    double S_tilde[nmax+1][lmax+1][lmax+1];
+    double T_tilde[nmax+1][lmax+1][lmax+1];
+    double ST_tilde[nmax+1][lmax+1][lmax+1];
     
 
     #pragma omp parallel for private(l, m)
@@ -203,6 +211,9 @@ void coefficients(int n_points, double *r , double *theta , double *phi, double 
 
             double A_nl;
             double All_phi_nlm_S, All_phi_nlm_T;
+            double All_phi_nlm_mix_S;
+            double All_phi_nlm_mix_T;
+            double All_phi_nlm_mix_ST;
 
             A_nl = Anl_tilde(n,l);
             sum_angular(&All_phi_nlm_S, &All_phi_nlm_T, n_points, r, theta, phi, M, n, l, 0); 
@@ -210,17 +221,41 @@ void coefficients(int n_points, double *r , double *theta , double *phi, double 
             T[n][l][0] = A_nl*All_phi_nlm_T;  
             //printf("%f \t %f \n", S[n][l][0], T[n][l][0]); 
 
+            if(covariance==1){
+            sum_angular_prod(&All_phi_nlm_mix_S, &All_phi_nlm_mix_T,\
+                             &All_phi_nlm_mix_ST, n_points, r, theta, phi, M, n, l, 0,\
+                             n, l, 0);
+            S_tilde[n][l][0] = A_nl*A_nl*All_phi_nlm_mix_S;
+            T_tilde[n][l][0] = A_nl*A_nl*All_phi_nlm_mix_T;
+            ST_tilde[n][l][0] = A_nl*A_nl*All_phi_nlm_mix_ST;
+            }
+
             for(m=1;m<=l; m++){
                        
             sum_angular(&All_phi_nlm_S, &All_phi_nlm_T, n_points, r, theta, phi, M, n, l, m);
             S[n][l][m] = 2.0*A_nl*All_phi_nlm_S;
             T[n][l][m] = 2.0*A_nl*All_phi_nlm_T;
         
+            if(covariance==1){
+            sum_angular_prod(&All_phi_nlm_mix_S, &All_phi_nlm_mix_T,\
+                             &All_phi_nlm_mix_ST, n_points, r, theta, phi, M, n, l, m,\
+                             n, l, m);
+
+            S_tilde[n][l][m] = 4*A_nl*A_nl*All_phi_nlm_mix_S;
+            T_tilde[n][l][m] = 4*A_nl*A_nl*All_phi_nlm_mix_T;
+            ST_tilde[n][l][m] = 4*A_nl*A_nl*All_phi_nlm_mix_ST;
+            } 
             }
         }
     }
    printf("Done computing coefficients and now writing the results \n");
    write_coeff(out_filename,  nmax+1, lmax+1, S, T);
+
+   if(covariance==1){
+   printf("Done computing covariance and now writing the results \n");
+   write_cov(out_filename,  nmax+1, lmax+1, S_tilde, T_tilde, ST_tilde);
+   }
+
 }
 
 

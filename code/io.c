@@ -81,10 +81,6 @@ void write_cov(char *filename, int n_max, int l_max, double S[n_max][l_max][l_ma
     fclose(out);
 }
 
-
-
-
-
 void rand_sampling(int n_points, double *r_rand, double *theta_rand, double *phi_rand, double *M_rand, double *r, double *theta, double *phi, double *M){
     srand(time(NULL));   
     int n;
@@ -100,10 +96,6 @@ void rand_sampling(int n_points, double *r_rand, double *theta_rand, double *phi
         M_rand[n] = M[rn];
     }
 }
-
-
-
-
 
 void read_data_sample(char *filename, int n_points, double *r, double *theta, \
                double *phi, double *M, double r_s){

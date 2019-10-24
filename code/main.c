@@ -37,19 +37,20 @@ int main(int argc, char **argv){
      int lmax= atof(argv[2]);
      // TODO: The code should recognize the number of particles in
      // the file.
-     int n_points=atoi(argv[3]);
-     int n_samples=atoi(argv[4]);
+     int covariance=atoi(argv[3]);
+     int n_points=atoi(argv[4]);
+     int n_samples=atoi(argv[5]);
 
-     char *in_path = argv[5];
-     char *in_snap = argv[6];
-     char *out_path = argv[7];
-     char *out_snap = argv[8];
+     char *in_path = argv[6];
+     char *in_snap = argv[7];
+     char *out_path = argv[8];
+     char *out_snap = argv[9];
 
 
-     int n_sampling = atoi(argv[9]);
-     int init_snap = atoi(argv[10]);
-     int final_snap = atoi(argv[11]);
-     double r_s = atof(argv[12]);
+     int n_sampling = atoi(argv[10]);
+     int init_snap = atoi(argv[11]);
+     int final_snap = atoi(argv[12]);
+     double r_s = atof(argv[13]);
 
      int n;
      int n_snaps;
@@ -113,12 +114,12 @@ int main(int argc, char **argv){
 
 
 
-     rand_sampling(n_sampling,  r_rand, theta_rand, phi_rand, M_rand, r, theta, phi, M);
+     rand_sampling(n_sampling, r_rand, theta_rand, phi_rand, M_rand, r, theta, phi, M);
      printf("Done sampling halo \n");
      printf("Computing coefficients \n");
-     coefficients(n_sampling, r_rand, theta_rand, phi_rand, M_rand, nmax, lmax, out_coeff);
+     coefficients(n_sampling, r_rand, theta_rand, phi_rand, M_rand, nmax, lmax, out_coeff, covariance);
      printf("Computing covariance matrix \n");
-     cov_matrix(n_sampling, r_rand, theta_rand, phi_rand, M_rand, nmax, lmax, out_covmat);
+     //cov_matrix(n_sampling, r_rand, theta_rand, phi_rand, M_rand, nmax, lmax, out_covmat);
      }     
      }
 
@@ -137,9 +138,9 @@ int main(int argc, char **argv){
      
   
      printf("Computing coefficients \n");
-     coefficients(n_points, r, theta, phi, M, nmax, lmax, out_coeff);
+     coefficients(n_points, r, theta, phi, M, nmax, lmax, out_coeff, covariance);
      printf("Computing covariance matrix \n");
-     cov_matrix(n_points, r, theta, phi, M, nmax, lmax, out_covmat);
+     //cov_matrix(n_points, r, theta, phi, M, nmax, lmax, out_covmat);
      printf("Done computing covariance matrix \n");
 
      }
