@@ -37,8 +37,6 @@ To-Do:
 #include "io.h"
 #include "covariance_matrix.h"
 
-
-
 double Anl_tilde(int n ,int l){
     /*
     Function that computes the A_nl from Eq.16 in Lowing+16 paper
