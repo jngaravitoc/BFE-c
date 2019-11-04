@@ -18,5 +18,5 @@ void cov_matrix(int n_points, double *r , double *theta , double *phi,\
                  double *m, int max, int lmax, char *out_filename);   
 
 void coefficients(int n_points, double *r , double *theta, double *phi,\
-                  double *M, int max, int lmax, char *out_filename, int covariance);                                                                   
+                  double *M, int max, int lmax, char *out_filename, char *out_filename2,int covariance);                                                                   
 

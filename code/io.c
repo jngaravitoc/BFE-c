@@ -10,6 +10,7 @@ void read_data(char *filename, int n_points, double *r, double *theta, \
 
     FILE *in;
     double X, Y, Z, m;
+    double VX, VY, VZ;
     int i;
 
     in = fopen(filename, "r");
@@ -21,7 +22,7 @@ void read_data(char *filename, int n_points, double *r, double *theta, \
     }
 
     for(i=0;i<=n_points;i++){
-        fscanf(in, "%lf %lf %lf %lf \n", &X, &Y, &Z, &m);
+        fscanf(in, "%lf %lf %lf %lf %lf %lf %lf \n", &X, &Y, &Z, &VX, &VY, &VZ, &m);
         r[i] = pow(pow(X, 2) + pow(Y, 2) + pow(Z,2),0.5)/r_s;
         theta[i] = acos(Z/(r[i]*r_s));
         phi[i] = atan2(Y, X);
@@ -88,8 +89,6 @@ void rand_sampling(int n_points, double *r_rand, double *theta_rand, double *phi
     printf("performing random sampling \n");
     for(n=0;n<=n_points;n++){
         rn = rand()%n_points;      
-        //printf("%d \n", rn);
-        //printf("%f \n", r[rn]);
         r_rand[n] = r[rn];
         theta_rand[n] = theta[rn];
         phi_rand[n] = phi[rn];

@@ -181,7 +181,7 @@ void cov_matrix(int n_points, double *r , double *theta , double *phi,\
 
 
 void coefficients(int n_points, double *r , double *theta , double *phi,\
-                  double *M, int nmax, int lmax, char *out_filename, int covariance){
+                  double *M, int nmax, int lmax, char *out_filename, char *out_filename2, int covariance){
 
     //
     //basic function that computes the S_nlm coefficient using the
@@ -251,7 +251,7 @@ void coefficients(int n_points, double *r , double *theta , double *phi,\
 
    if(covariance==1){
    printf("Done computing covariance and now writing the results \n");
-   write_cov(out_filename,  nmax+1, lmax+1, S_tilde, T_tilde, ST_tilde);
+   write_cov(out_filename2,  nmax+1, lmax+1, S_tilde, T_tilde, ST_tilde);
    }
 
 }
