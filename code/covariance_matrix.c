@@ -202,8 +202,9 @@ void coefficients(int n_points, double *r , double *theta , double *phi,\
     double T_tilde[nmax+1][lmax+1][lmax+1];
     double ST_tilde[nmax+1][lmax+1][lmax+1];
     
-
+    #ifdef OMP
     #pragma omp parallel for private(l, m)
+    #endif    
     for(n=0;n<=nmax;n++){
        for(l=0;l<=lmax;l++){
 

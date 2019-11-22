@@ -69,10 +69,10 @@ int main(int argc, char **argv){
      M = malloc(n_points*sizeof(long double));
 
 
-     r_rand = malloc(n_points*sizeof(long double));
-     theta_rand = malloc(n_points*sizeof(long double));
-     phi_rand = malloc(n_points*sizeof(long double));
-     M_rand = malloc(n_points*sizeof(long double));
+     r_rand = malloc(n_sampling*sizeof(long double));
+     theta_rand = malloc(n_sampling*sizeof(long double));
+     phi_rand = malloc(n_sampling*sizeof(long double));
+     M_rand = malloc(n_sampling*sizeof(long double));
 
      for(n_snaps=init_snap;n_snaps<=final_snap;n_snaps++){
      
@@ -113,7 +113,7 @@ int main(int argc, char **argv){
      strcat(out_coeff, buffer_str_coeff);
      strcat(out_covmat, buffer_str_cov);
 
-     rand_sampling(n_sampling, r_rand, theta_rand, phi_rand, M_rand, r, theta, phi, M);
+     rand_sampling(n_points, n_sampling, r_rand, theta_rand, phi_rand, M_rand, r, theta, phi, M);
      printf("Done sampling halo \n");
      printf("Computing coefficients \n");
      coefficients(n_sampling, r_rand, theta_rand, phi_rand, M_rand, nmax, lmax, out_coeff, out_covmat, covariance);

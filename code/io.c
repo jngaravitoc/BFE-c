@@ -82,12 +82,12 @@ void write_cov(char *filename, int n_max, int l_max, double S[n_max][l_max][l_ma
     fclose(out);
 }
 
-void rand_sampling(int n_points, double *r_rand, double *theta_rand, double *phi_rand, double *M_rand, double *r, double *theta, double *phi, double *M){
+void rand_sampling(int n_points, int n_sample, double *r_rand, double *theta_rand, double *phi_rand, double *M_rand, double *r, double *theta, double *phi, double *M){
     srand(time(NULL));   
     int n;
     int rn;
     printf("performing random sampling \n");
-    for(n=0;n<=n_points;n++){
+    for(n=0;n<=n_sample;n++){
         rn = rand()%n_points;      
         r_rand[n] = r[rn];
         theta_rand[n] = theta[rn];
