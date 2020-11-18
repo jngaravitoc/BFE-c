@@ -2,7 +2,7 @@ BFE-c
 ==========
 
 The code computes coefficients of the [Hernquist Basis Field Expansion](https://ui.adsabs.harvard.edu/abs/1992ApJ...386..375H/abstract)  from snapshots of N-body simulations. 
-At the moment, the code only reads outputs from Gadget. 
+At the moment, the code only reads ascii files. 
 
 BFE-c is wirtten in C and it can run in parallel for an efficient computation of the coefficients.
 In addition, the code also computes the variance matrix of the coefficients (following Weinberg+98) 
