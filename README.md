@@ -6,7 +6,7 @@ At the moment, the code only reads outputs from Gadget.
 
 BFE-c is wirtten in C and it can run in parallel for an efficient computation of the coefficients.
 In addition, the code also computes the variance matrix of the coefficients (following Weinberg+98) 
-which will be useful for post noise-reduction post-processing. 
+which will be useful for noise-reduction post-processing. 
 
 Noise-reduction:
 ---------------
@@ -18,13 +18,14 @@ from the discrete particle distribution.
 
 Install:
 --------
-
+make
 
 Dependencies:
 -------------
 
 - gsl
 - openmp 
+- math
 
 How to run:
 -----------
